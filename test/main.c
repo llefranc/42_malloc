@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/04/20 17:15:51 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/04/20 17:37:03 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 int main(void)
 {
+	malloc(1);
 	return 0;
 }
