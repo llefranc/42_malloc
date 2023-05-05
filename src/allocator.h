@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   allocator.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:12:22 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/04/20 17:15:34 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/05/05 16:59:47 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 #include <stddef.h>
 
-void *malloc(size_t size);
-void *realloc(void *ptr, size_t size);
-void free(void* ptr);
+void *ft_malloc(size_t size);
+void *ft_realloc(void *ptr, size_t size);
+void ft_free(void* ptr);
 void show_alloc_mem(void);
 
 #endif /* ALLOCATOR_H */

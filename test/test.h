@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                          :+:      :+:    :+:   */
+/*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/20 12:17:55 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/04/20 13:01:39 by lucaslefran      ###   ########.fr       */
+/*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
+/*   Updated: 2023/05/05 16:27:02 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "allocator.h"
+#ifndef TEST_H
+#define TEST_H
 
-void *ft_realloc(void *ptr, size_t size)
-{
-	(void)ptr;
-	(void)size;
-	return NULL;
-}
+void test_free_mmap(void);
+
+#endif /* TEST_H */
