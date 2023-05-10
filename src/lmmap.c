@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <stdint.h>
 
 /**
  * Return a size rounded to a multiple of page_size.
@@ -35,27 +36,26 @@ static size_t rnd_to_page_size(size_t size)
 /**
  * Return the number of elements in a list of mmaps.
 */
-int lmmap_get_size(void *ptr)
+int lmmap_get_size(struct mmaphdr *ptr)
 {
 	int nb = 0;
-	struct mmap_info *elem = ptr;
 
-	while (elem) {
-		elem = elem->next;
+	while (ptr) {
+		ptr = ptr->next;
 		++nb;
 	}
 	return nb;
 }
 
 /**
- * Do a mmap and init at the beginning of the mmapped area the struct mmap_info.
+ * Do a mmap and init at the beginning of the mmapped area the struct mmaphdr.
  *
- * Return: A pointer to the mmaped area which can be cast in struct mmap_info
+ * Return: A pointer to the mmaped area which can be cast in struct mmaphdr
  *         pointer, or NULL if an error occured.
 */
 void * lmmap_new(size_t size)
 {
-	struct mmap_info *tmp;
+	struct mmaphdr *tmp;
 
 	size = rnd_to_page_size(size);
 	tmp = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE |
@@ -65,22 +65,22 @@ void * lmmap_new(size_t size)
 	tmp->prev = NULL;
 	tmp->next = NULL;
 	tmp->size = size;
+	tmp->nb_alloc = 0;
 	return tmp;
 }
 
 /**
- * Do a mmap, init at the beginning of the mmapped area the struct mmap_info,
+ * Do a mmap, init at the beginning of the mmapped area the struct mmaphdr,
  * and add this new mmaped memory at the end of a mmap linked list represented
  * by ptr.
  *
  * Return: A pointer to the new mmaped area (e.g. the new elem at the end of
- *         the mmap list) which can be cast in struct mmap_info pointer, or
+ *         the mmap list) which can be cast in struct mmaphdr pointer, or
  *         NULL if an error occured.
 */
-void * lmmap_push_back(void *ptr, size_t size)
+void * lmmap_push_back(struct mmaphdr *ptr, size_t size)
 {
-	struct mmap_info *elem = ptr;
-	struct mmap_info *tmp;
+	struct mmaphdr *tmp;
 
 	if (ptr == NULL)
 		return NULL;
@@ -89,12 +89,13 @@ void * lmmap_push_back(void *ptr, size_t size)
 		   MAP_ANONYMOUS, -1, 0);
 	if (tmp == NULL)
 		return NULL;
-	while (elem->next)
-		elem = elem->next;
-	elem->next = tmp;
-	tmp->prev = elem;
+	while (ptr->next)
+		ptr = ptr->next;
+	ptr->next = tmp;
+	tmp->prev = ptr;
 	tmp->next = NULL;
 	tmp->size = size;
+	tmp->nb_alloc = 0;
 	return tmp;
 }
 
@@ -103,10 +104,9 @@ void * lmmap_push_back(void *ptr, size_t size)
  *
  * Return: 0 on success, -1 in case of error.
 */
-int lmmap_rm_elem(void *ptr)
+int lmmap_rm_elem(struct mmaphdr *elem)
 {
-	struct mmap_info *elem = ptr;
-	struct mmap_info *tmp;
+	struct mmaphdr *tmp;
 
 	if (elem->prev) {
 		tmp = elem->prev;
@@ -120,23 +120,25 @@ int lmmap_rm_elem(void *ptr)
 }
 
 /**
- * Print infos stored at the beginning of a mmap.
+ * Print infos of an elem from a linked list of mmaped area, using the struct
+ * mmaphdr stored at the beginning of the mmap area.
 */
-void mmap_print_info(struct mmap_info *ptr)
+void lmmap_print_elem(struct mmaphdr *elem)
 {
-	printf("------ mmap (%p) ------\n", ptr);
-	printf("prev mmap addr = %p\n", ptr->prev);
-	printf("next mmap addr = %p\n", ptr->next);
-	printf("size mmap = %zu\n", ptr->size);
+	printf("------ mmap (%p) ------\n", elem);
+	printf("prev mmap addr = %p\n", elem->prev);
+	printf("next mmap addr = %p\n", elem->next);
+	printf("size mmap = %zu\n", elem->size);
+	printf("nb alloc = %d\n", elem->nb_alloc);
 }
 
 /**
  * Print the infos for each elem of a mmap linked list.
 */
-void lmmap_print(struct mmap_info *ptr)
+void lmmap_print_all(struct mmaphdr *ptr)
 {
 	while (ptr) {
-		mmap_print_info(ptr);
+		lmmap_print_elem(ptr);
 		ptr = ptr->next;
 	}
 }
