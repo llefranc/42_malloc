@@ -53,20 +53,7 @@ struct s_bins {
 // static struct s_bins bins;
 // static int page_size;
 
-/**
- * Return a size rounded to a multiple of page_size.
-*/
-static inline size_t rnd_to_page_size(size_t size)
-{
-	int page_size = getpagesize();
-	size_t tmp = size % page_size;
 
-	if (tmp > 0)
-		tmp = page_size - tmp;
-
-	printf("rnd page size = %zu\n", size + tmp);
-	return size + tmp;
-}
 
 /**
  * Init bin's address and bin' size by mmaping size bytes rounded to page size.

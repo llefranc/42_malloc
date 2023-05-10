@@ -6,7 +6,7 @@
 #    By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 12:10:01 by lucaslefran       #+#    #+#              #
-#    Updated: 2023/05/05 17:02:57 by llefranc         ###   ########.fr        #
+#    Updated: 2023/05/10 11:17:05 by llefranc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,16 +22,16 @@ LIB_LINK_NAME = lib$(LIB_NAME).so
 LIB_FULL_NAME = lib$(LIB_NAME)_$(HOSTTYPE).so
 LIB_FLAGS = -fPIC -Wall -Werror -Wextra
 
-LIB_SRCS = free.c malloc.c realloc.c show_alloc_mem.c mmap.c
+LIB_SRCS = free.c malloc.c realloc.c show_alloc_mem.c lmmap.c
 LIB_OBJS = $(LIB_SRCS:.c=.o)
 LIB_PATH = src/
-LIB_HEADS = allocator.h mmap.h
+LIB_HEADS = allocator.h lmmap.h
 
 # tester
-TEST_FLAGS =  -Wall -Werror -Wextra
+TEST_FLAGS = -Wall -Werror -Wextra
 TEST_NAME = tester
 
-TEST_SRCS = main.c test_mmap.c
+TEST_SRCS = main.c test_lmmap.c
 TEST_OBJS = $(TEST_SRCS:.c=.o)
 TEST_PATH = test/
 
