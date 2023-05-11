@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:03:44 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/10 19:04:17 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/11 13:34:36 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,19 @@
  *        was never used by the allocator.
 */
 struct chkinfo {
+	size_t size : 63;
 	_Bool is_alloc : 1;
-	short size : 15;
+};
+
+/**
+ * In free chunk, this structure is stored just after the header and allow the
+ * free chunks to be linked all together.
+ * @prev: Pointer the struct chfkree of the previous free chunk.
+ * @next: Pointer the struct chfkree of the next free chunk.
+*/
+struct chkfree {
+	struct chkfree *prev;
+	struct chkfree *next;
 };
 
 /**
@@ -57,6 +68,7 @@ static inline t_chkhdr * chk_ftoh(t_chkftr *ftr)
 /**
  * Return the footer of the chunk before the actual one using its footer.
 */
+// useless ? need to think about it
 static inline t_chkftr * chk_prev_ftr(t_chkftr *ftr)
 {
 	uint8_t *tmp;
@@ -72,6 +84,7 @@ static inline t_chkftr * chk_prev_ftr(t_chkftr *ftr)
 /**
  * Return the header of the chunk after the actual one using its header.
 */
+// useless ? need to think about it
 static inline t_chkhdr * chk_next_hdr(t_chkhdr *hdr)
 {
 	uint8_t *tmp;
@@ -85,7 +98,5 @@ static inline t_chkhdr * chk_next_hdr(t_chkhdr *hdr)
 }
 
 void chk_alloc(void *ptr, short size);
-
-void test_chunk(void);
 
 #endif /* CHUNK_H */

@@ -1,126 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_malloc.c                                           :+:      :+:    :+:   */
+/*   malloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:26 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/04/21 17:17:25 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/11 11:31:11 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "allocator.h"
 
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/mman.h>
+#include "bins.h"
+#include "lmmap.h"
+#include "chunk.h"
+
 #include <errno.h>
 
-#define BIN_MAX_ALLOC (100)
-#define BOUNDARY_TAG_SIZE (8)
+static void * alloc_tiny(size_t size)
+{
+	(void)size;
+	return NULL;
+}
 
-#define TINY_MAX_CHUNK_SIZE (256)
-#define TINY_MAX_ALLOC_SIZE (TINY_MAX_CHUNK_SIZE - 2 * BOUNDARY_TAG_SIZE)
+static void * alloc_small(size_t size)
+{
+	(void)size;
+	return NULL;
+}
 
-#define SMALL_MAX_CHUNK_SIZE (1024)
-#define SMALL_MAX_ALLOC_SIZE (SMALL_MAX_CHUNK_SIZE - 2 * BOUNDARY_TAG_SIZE)
-
-
-/**
- * Contain pointer to a mapping in the virtual address space of the calling
- * proces and the mapping size. This memory is used to store allocated memory.
-*/
-// struct bin {   >> useless car size ne marche pas quand on chain les maps
-// 	void *ptr;
-// 	size_t size;
-// };
-
-/**
- * Contain the differents bins for tiny, small and large malloc, which are a
- * linked list of mmaps.
- *
- * @tiny: x mmap containing x tiny chunks of memory.
- * @small: x mmap containing x small chunks of memory.
- * @large: x mmap containing each one one large allocation.
-*/
-struct s_bins {
-	void *tiny;
-	void *small;
-	void *large;
-};
-
-// static struct s_bins bins;
-// static int page_size;
-
-
-
-/**
- * Init bin's address and bin' size by mmaping size bytes rounded to page size.
-*/
-// static int init_bin(struct bin *b, size_t size)
-// {
-// 	b->size = rnd_to_page_size(size);
-// 	b->ptr = mmap(NULL, b->size, PROT_READ | PROT_WRITE, MAP_PRIVATE |
-// 		      MAP_ANONYMOUS, -1, 0);
-// 	if (b->ptr == MAP_FAILED)
-// 		return -1;
-// 	return 0;
-// }
-
-
-/**
- * Init page_size and the tiny, small and large bins by doing a mmap for each
- * of them.
-*/
-// int init(void)
-// {
-// 	static _Bool is_init = 0;
-
-// 	if (is_init)
-// 		return 0;
-
-// 	page_size = getpagesize();
-// 	if (init_bin(&bins.tiny, TINY_MAX_CHUNK_SIZE * BIN_MAX_ALLOC) == -1 ||
-// 	    init_bin(&bins.small, SMALL_MAX_CHUNK_SIZE * BIN_MAX_ALLOC) == -1 ||
-// 	    init_bin(&bins.large, page_size) == -1)
-// 		return -1;
-
-// 	is_init = 1;
-// 	printf("init done\n");
-// 	printf("pagesize = %d\n", page_size);
-// 	printf("tiny addr = %p and size = %zu\n", bins.tiny.ptr, bins.tiny.size);
-// 	printf("small addr = %p and size = %zu\n", bins.small.ptr, bins.small.size);
-// 	printf("large addr = %p and size = %zu\n", bins.large.ptr, bins.large.size);
-// 	return 0;
-// }
-
-// void show_alloc_mem(void)
-// {
-// 	printf("TINY : %p\n", bins.tiny.ptr);
-// 	printf("TINY : %p\n", bins.large.ptr);
-// 	printf("TINY : %p\n", bins.large.ptr);
-// 	printf("TINY : %p\n", bins.large.ptr);
-// }
+static void * alloc_large(size_t size)
+{
+	(void)size;
+	return NULL;
+}
 
 void *ft_malloc(size_t size)
 {
-	// printf("my_ft_malloc\n");
-	// if (init() == -1) {
-	// 	fprintf(stderr, "init error\n");
-	// 	errno = ENOMEM;
-	// 	return NULL;
-	// }
+	void *new_alloc = NULL;
 
-	// if (clear_bin(&bins.tiny) == -1) {
-	// 	printf("err cleaning tiny\n");
-	// }
-	// if (clear_bin(&bins.small) == -1) {
-	// 	printf("err cleaning small\n");
-	// }
-	// if (clear_bin(&bins.large) == -1) {
-	// 	printf("err cleaning large\n");
-	// }
-	(void)size;
-	return NULL;
+	if (!size)
+		return NULL;
+	if (size < TINY_MAX_CHUNK_SIZE)
+		new_alloc = alloc_tiny(size);
+	else if (size < SMALL_MAX_CHUNK_SIZE)
+		new_alloc = alloc_small(size);
+	else
+		new_alloc = alloc_large(size);
+	return new_alloc;
 }
