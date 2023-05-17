@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:28:19 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/11 13:33:57 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:54:02 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,15 @@
 #include "chunk.h"
 
 #define BIN_MAX_ALLOC (100)
-#define BOUNDARY_TAG_SIZE (sizeof(struct chkinfo))
 
 // a revoir les calculs de boundary tag
 #define TINY_MAX_CHUNK_SIZE (128)
-#define TINY_MAX_ALLOC_SIZE (TINY_MAX_CHUNK_SIZE + 2 * BOUNDARY_TAG_SIZE)
+#define TINY_MAX_ALLOC_SIZE (TINY_MAX_CHUNK_SIZE + 2 * BNDARY_TAG_SIZE)
 #define TINY_MMAP_SIZE (sizeof(struct mmaphdr) + (TINY_MAX_ALLOC_SIZE) * \
 (BIN_MAX_ALLOC))
 
 #define SMALL_MAX_CHUNK_SIZE (512)
-#define SMALL_MAX_ALLOC_SIZE (SMALL_MAX_CHUNK_SIZE - 2 * BOUNDARY_TAG_SIZE)
+#define SMALL_MAX_ALLOC_SIZE (SMALL_MAX_CHUNK_SIZE - 2 * BNDARY_TAG_SIZE)
 #define SMALL_MMAP_SIZE (sizeof(struct mmaphdr) + (SMALL_MAX_ALLOC_SIZE) * \
 (BIN_MAX_ALLOC))
 

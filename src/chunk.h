@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:03:44 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/11 13:34:36 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:16:09 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,86 +17,97 @@
 #include <stddef.h>
 
 /**
- * Information contained in the header/footer of each chunk.
+ * Information inside the header of each chunk.
+ * The two pointers are only used for a free chunk, and are actually not stored
+ * in the header of the free chunk but at the beginning of its body. For a free
+ * chunk, casting the chunk's address to this struct  allows to manipulate
+ * those pointers.
+ *
  * @is_alloc: Indicate if the chunk is allocated or not.
- * @size: Indicate the size of the free/allocated chunk. Size is always > 0 for
- *        a free or allocated chunk; if size = 0, then this memory from mmap
- *        was never used by the allocator.
+ * @size: Indicate the size of the free/allocated chunk.
+ * @prev_free: Pointer to the header of the previous free chunk (NULL if first
+ *             one).
+ * @next_free: Pointer to the header of the next free chunk (NULL if last one).
 */
-struct chkinfo {
+struct chkhdr {
+	size_t size : 63;
+	_Bool is_alloc : 1;
+	struct chkhdr *prev_free;
+	struct chkhdr *next_free;
+};
+
+/**
+ * Information in the footer of each chunk.
+ *
+ * @is_alloc: Indicate if the chunk is allocated or not.
+ * @size: Indicate the size of the free/allocated chunk.
+*/
+struct chkftr {
 	size_t size : 63;
 	_Bool is_alloc : 1;
 };
 
-/**
- * In free chunk, this structure is stored just after the header and allow the
- * free chunks to be linked all together.
- * @prev: Pointer the struct chfkree of the previous free chunk.
- * @next: Pointer the struct chfkree of the next free chunk.
-*/
-struct chkfree {
-	struct chkfree *prev;
-	struct chkfree *next;
-};
+/*
+ * Footer does the same size than header, as the 2 pointers inside the header
+ * for struct chkhdr are used only for free chunk and are stored inside free
+ * chunk body.
+ */
+#define BNDARY_TAG_SIZE (sizeof(struct chkftr))
 
 /**
- * Header of a chunk.
+ * Return a pointer to the chunk footer using chunk header.
 */
-typedef struct chkinfo t_chkhdr;
-
-/**
- * Footer of a chunk.
-*/
-typedef struct chkinfo t_chkftr;
-
-/**
- * Return a pointer to the chunk header using chunk footer.
-*/
-static inline t_chkftr * chk_htof(t_chkhdr *hdr)
+static inline struct chkftr * chk_htof(struct chkhdr *hdr)
 {
-	return (t_chkftr *)((uint8_t *)hdr + sizeof(*hdr) + hdr->size);
+	return (struct chkftr *)((uint8_t *)hdr + BNDARY_TAG_SIZE + hdr->size);
 }
 
 /**
- * Return a pointer to the chunk footer using the chunk header.
+ * Return a pointer to the chunk header using the chunk footer.
 */
-static inline t_chkhdr * chk_ftoh(t_chkftr *ftr)
+static inline struct chkhdr * chk_ftoh(struct chkftr *ftr)
 {
-	return (t_chkhdr *)((uint8_t *)ftr - sizeof(*ftr) - ftr->size);
+	return (struct chkhdr *)((uint8_t *)ftr - BNDARY_TAG_SIZE - ftr->size);
 }
 
 /**
- * Return the footer of the chunk before the actual one using its footer.
+ * Take a pointer to a chunk footer and return a pointer to the footer of
+ * previous chunk.
 */
-// useless ? need to think about it
-static inline t_chkftr * chk_prev_ftr(t_chkftr *ftr)
+static inline struct chkftr * chk_prev_ftr(struct chkftr *ftr)
 {
-	uint8_t *tmp;
-
-	/* No previous chunk */
-	if (!ftr->size)
-		return NULL;
-	tmp = (uint8_t *)ftr;
-	tmp -= (sizeof(t_chkftr) + ftr->size + sizeof(t_chkhdr));
-	return (t_chkftr *)tmp;
+	return (struct chkftr *)(((uint8_t *)ftr) - ftr->size - 2 *
+	       BNDARY_TAG_SIZE);
 }
 
 /**
- * Return the header of the chunk after the actual one using its header.
+ * Take a pointer to a chunk header and return a pointer to the header of
+ * next chunk.
 */
-// useless ? need to think about it
-static inline t_chkhdr * chk_next_hdr(t_chkhdr *hdr)
+static inline struct chkhdr * chk_next_hdr(struct chkhdr *hdr)
 {
-	uint8_t *tmp;
-
-	/* No next chunk */
-	if (!hdr->size)
-		return NULL;
-	tmp = (uint8_t *)hdr;
-	tmp += sizeof(t_chkhdr) + hdr->size + sizeof(t_chkftr);
-	return (t_chkhdr *)tmp;
+	return (struct chkhdr *)(((uint8_t *)hdr) + hdr->size + 2 *
+	       BNDARY_TAG_SIZE);
 }
 
-void chk_alloc(void *ptr, short size);
+/**
+ * Check if the requested size can exactly fit in the specified free chunk,
+ * otherwise check if the free chunk can be splitted into one with the specified
+ * size and another chunk with at least a header and a footer.
+ *
+ * @chk: Header of the free chunk targeted for the allocation.
+ * @size: The aligned size of the requested allocation (without the boundary
+ *        tags).
+ * Return: 1 if chunk is free with enough space, 0 otherwise.
+*/
+static inline _Bool chk_is_alloc_ok(struct chkhdr *chk, size_t size)
+{
+	return !chk->is_alloc && (chk->size == size || chk->size > (size +
+	       BNDARY_TAG_SIZE * 2));
+}
+
+size_t chk_get_alloc_size(size_t size);
+void chk_print(struct chkhdr *hdr);
+struct chkhdr * chk_alloc(struct chkhdr *hdr, size_t size_alloc);
 
 #endif /* CHUNK_H */
