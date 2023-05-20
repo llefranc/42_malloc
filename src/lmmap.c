@@ -54,16 +54,20 @@ int lmmap_get_size(struct mmaphdr *head)
  * The first chunk will be considered as free and will cover the totality of
  * the mmap area. The first allocation will be done inside this chunk.
  *
- * >>> Dump of beginning of mmap area after init.
- * >>> 0x0020: the header used only to access the first free chunk (3 qwords,
- *             only next_free member of struct chkhdr is used (0x0030)).
- * >>> 0x0038: Start of the first chunk, which is free and contain the rest of
- *             the mmap area after init.
+ * --- Dump of beginning of mmap area after init ---
+ * 0x0020: The header used only to access the first free chunk (3 qwords,
+ *         only next_free member of struct chkhdr is used (0x0030)).
+ * 0x0038: Pointer to the header of the first chunk.
+ * 0x0040: Pointer to the footer of the last chunk.
+ * 0x0048: Start of the first chunk, which is free and contain the rest of
+ *         the mmap area after init.
+ *
  * 0x0000: 00 00 00 00 00 00 00 00   00 00 00 00 00 00 00 00
  * 0x0010: 00 10 00 00 00 00 00 00   00 00 00 00 00 00 00 00
  * 0x0020: 00 00 00 00 00 00 00 00   00 00 00 00 00 00 00 00
- * 0x0030: 38 20 fa 6d 97 7f 00 00   b8 0f 00 00 00 00 00 00
- * 0x0040: 20 20 fa 6d 97 7f 00 00   00 00 00 00 00 00 00 00
+ * 0x0030: 48 20 d3 49 43 7f 00 00   48 20 d3 49 43 7f 00 00
+ * 0x0040: f8 2f d3 49 43 7f 00 00   a8 0f 00 00 00 00 00 00
+ * 0x0050: 20 20 d3 49 43 7f 00 00   00 00 00 00 00 00 00 00
 */
 static void init_first_free_chk(struct mmaphdr *m)
 {
@@ -72,7 +76,7 @@ static void init_first_free_chk(struct mmaphdr *m)
 	 * size of header is already contained in sizeof(struct mmaphdr).
 	 */
 	size_t chk_size = m->size - sizeof(*m) - BNDARY_TAG_SIZE;
-	struct chkhdr *hdr = (struct chkhdr *)&m->first_chk;
+	struct chkhdr *hdr = (struct chkhdr *)&m->start_chk;
 	struct chkftr *ftr;
 
 	/* Init first chunk (one big free chunk) */
@@ -84,7 +88,11 @@ static void init_first_free_chk(struct mmaphdr *m)
 	ftr->is_alloc = 0;
 	ftr->size = chk_size;
 
-	/* Point the first chunk which is free after init. */
+	/* First and last point at init to the same chunk */
+	m->first_chk = hdr;
+	m->last_chk = ftr;
+
+	/* Point to the first and only chunk which is for now free */
 	m->first_free.next_free = hdr;
 	m->first_free.prev_free = NULL;
 }

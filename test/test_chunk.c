@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:34:48 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/17 18:26:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/20 17:28:49 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void test_chk_alloc(void)
 	// chk_print(tmp);
 	if ((tmp = chk_alloc(m->first_free.next_free, 128)) == NULL)
 		printf("Alloc should failed because too large\n");
-	if ((tmp = chk_alloc(m->first_free.next_free, 56)) == NULL)
+	if ((tmp = chk_alloc(m->first_free.next_free, 40)) == NULL)
 		printf("fatal_err chk_alloc failed\n");
 	chk_print(tmp);
 
@@ -95,7 +95,7 @@ void test_chk_moves(void)
 	if (chk_alloc(m->first_free.next_free, 32) == NULL)
 		printf("fatal_err chk_alloc failed\n");
 
-	struct chkhdr *hdr = (struct chkhdr *)(((uint8_t *)&m->first_free) + sizeof(m->first_free));
+	struct chkhdr *hdr = m->first_chk;
 	struct chkftr *ftr;
 	while (hdr != m->first_free.next_free) {
 		chk_print(hdr);
@@ -103,9 +103,10 @@ void test_chk_moves(void)
 		hdr = chk_ftoh(ftr);
 		hdr = chk_next_hdr(hdr);
 	}
-	ftr = (struct chkftr *)(((uint8_t *)hdr) - BNDARY_TAG_SIZE);
+	ftr = chk_prev_ftr(m->last_chk);
+	hdr = chk_ftoh(ftr);
 	printf("changing sides\n");
-	while (hdr != (struct chkhdr *)&m->first_chk) {
+	while (hdr != m->first_chk) {
 		hdr = chk_ftoh(ftr);
 		chk_print(hdr);
 		ftr = chk_htof(hdr);
