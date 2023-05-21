@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:26 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/05/20 15:14:00 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/21 21:02:39 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "chunk.h"
 
 #include <errno.h>
+
+struct s_bins bins = { .tiny = NULL, .small = NULL, .large = NULL };
 
 static void * alloc_tiny(size_t size)
 {

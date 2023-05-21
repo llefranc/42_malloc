@@ -6,7 +6,7 @@
 #    By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 12:10:01 by lucaslefran       #+#    #+#              #
-#    Updated: 2023/05/11 10:36:41 by llefranc         ###   ########.fr        #
+#    Updated: 2023/05/21 21:13:51 by llefranc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ LIB_HEADS = allocator.h lmmap.h chunk.h
 TEST_FLAGS = -Wall -Werror -Wextra
 TEST_NAME = tester
 
-TEST_SRCS = main.c test_lmmap.c test_chunk.c
+TEST_SRCS = main.c test_lmmap.c test_chunk.c test_show_alloc_mem.c
 TEST_OBJS = $(TEST_SRCS:.c=.o)
 TEST_PATH = test/
 

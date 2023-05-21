@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/05/21 20:33:29 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/21 21:12:04 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,6 @@
 #include <stdlib.h>
 #include <limits.h>
 
-void print_bins_size(void)
-{
-	printf("tiny bin size = %zu\n", TINY_MMAP_SIZE);
-	printf("small bin size = %zu\n", SMALL_MMAP_SIZE);
-}
-
 void print_mem(void *ptr, int nb_bytes)
 {
 	uint8_t *tmp = ptr;
@@ -48,8 +42,6 @@ void print_mem(void *ptr, int nb_bytes)
 
 int main(void)
 {
-	// print_bins_size();
-
 	// test_lmmap_get_size();
 	// test_lmmap_new();
 	// test_lmmap_push_back();
@@ -68,6 +60,8 @@ int main(void)
 	// test_chk_free_merge_next();
 	// test_chk_free_merge_prev_and_next();
 	// test_chk_free_all_with_all_cases();
+
+	test_show_alloc_mem_no_alloc();
 
 	return 0;
 }

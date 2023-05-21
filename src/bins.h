@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:28:19 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/20 15:14:17 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/21 20:59:54 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,7 @@ struct s_bins {
 	struct mmaphdr *small;
 	struct mmaphdr *large;
 };
+
+extern struct s_bins bins;
 
 #endif /* BINS_H */

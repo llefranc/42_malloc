@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/21 19:45:21 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/21 21:11:37 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ void test_chk_free_merge_prev(void);
 void test_chk_free_merge_next(void);
 void test_chk_free_merge_prev_and_next(void);
 void test_chk_free_all_with_all_cases(void);
+
+void test_show_alloc_mem_no_alloc(void);
 
 #endif /* TEST_H */
