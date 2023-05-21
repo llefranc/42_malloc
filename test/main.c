@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/05/17 20:01:16 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/21 20:33:29 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,13 @@ int main(void)
 	// test_chk_is_alloc_ok();
 	// test_chk_alloc();
 	// test_chk_moves();
+	// test_chk_free_basics();
+	// test_chk_free_no_merge_one_big_chunk();
+	// test_chk_free_no_merge_several_small_chunks();
+	// test_chk_free_merge_prev();
+	// test_chk_free_merge_next();
+	// test_chk_free_merge_prev_and_next();
+	// test_chk_free_all_with_all_cases();
 
 	return 0;
 }
