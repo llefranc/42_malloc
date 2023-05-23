@@ -27,8 +27,6 @@ static size_t rnd_to_page_size(size_t size)
 
 	if (tmp > 0)
 		tmp = page_size - tmp;
-
-	printf("rnd page size = %zu\n", size + tmp);
 	return size + tmp;
 }
 
@@ -101,14 +99,16 @@ static void init_first_free_chk(struct mmaphdr *m)
 }
 
 /**
- * Do a mmap and init at the beginning of the mmapped area the struct mmaphdr.
+ * Do a mmap and init at the beginning of the mmapped area the struct mmaphdr,
+ * then set the head of the mmap linked list with the new mmap.
  *
+ * @head: Head of the mmaps linked list.
  * @size: The requested size for the mmap syscall. Size will be rounded up to
  *        a multiple of page_size.
  * Return: A pointer to the mmaped area which can be cast in struct mmaphdr
  *         pointer, or NULL if an error occured.
 */
-void * lmmap_new(size_t size)
+void * lmmap_new(struct mmaphdr **head, size_t size)
 {
 	struct mmaphdr *tmp;
 
@@ -122,6 +122,7 @@ void * lmmap_new(size_t size)
 	tmp->size = size;
 	tmp->nb_alloc = 0;
 	init_first_free_chk(tmp);
+	*head = tmp;
 	return tmp;
 }
 

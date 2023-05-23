@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:09:16 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/20 17:27:50 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:25:30 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ struct mmaphdr {
 };
 
 int lmmap_get_size(struct mmaphdr *head);
-void * lmmap_new(size_t size);
+void * lmmap_new(struct mmaphdr **head, size_t size);
 void * lmmap_push_back(struct mmaphdr *head, size_t size);
 int lmmap_rm_elem(struct mmaphdr *elem);
 void lmmap_print_elem(struct mmaphdr *elem);

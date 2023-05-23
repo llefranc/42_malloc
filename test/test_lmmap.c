@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:22 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/23 11:54:37 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:26:56 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void test_lmmap_new(void)
 
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_new <<<<<<<<<\n");
 	printf("Creating a linked list of 1 mmap:\n");
-	assert((a = lmmap_new(1000)) != NULL);
+	assert(lmmap_new(&a, 1000) != NULL);
 	printf("New map of %d elems\n", lmmap_get_size(a));
 	printf("Dump of the 4096 bytes of the init mmap area:\n");
 	print_mem(a, 4096);
@@ -61,7 +61,7 @@ void test_lmmap_push_back(void)
 	struct mmaphdr *a;
 
 	printf("Creating a linked list of 5 mmaps:\n");
-	assert((a = lmmap_new(1000)) != NULL);
+	assert(lmmap_new(&a, 1000) != NULL);
 	assert(lmmap_push_back(a, 10000) != NULL);
 	assert(lmmap_push_back(a, 20000) != NULL);
 	assert(lmmap_push_back(a, 30000) != NULL);
@@ -77,7 +77,7 @@ void test_lmmap_rm_first_elem(void)
 	struct mmaphdr *a;
 	struct mmaphdr *b;
 
-	assert((a = lmmap_new(1000)) != NULL);
+	assert(lmmap_new(&a, 1000) != NULL);
 	assert((b = lmmap_push_back(a, 10000)) != NULL);
 	assert(lmmap_push_back(a, 20000) != NULL);
 	lmmap_print_all(a);
@@ -95,7 +95,7 @@ void test_lmmap_rm_middle_elem(void)
 	struct mmaphdr *a;
 	struct mmaphdr *b;
 
-	assert((a = lmmap_new(1000)) != NULL);
+	assert(lmmap_new(&a, 1000) != NULL);
 	assert((b = lmmap_push_back(a, 10000)) != NULL);
 	assert(lmmap_push_back(a, 20000) != NULL);
 	lmmap_print_all(a);
@@ -113,7 +113,7 @@ void test_lmmap_rm_last_elem(void)
 	struct mmaphdr *a;
 	struct mmaphdr *c;
 
-	assert((a = lmmap_new(1000)) != NULL);
+	assert(lmmap_new(&a, 1000) != NULL);
 	assert(lmmap_push_back(a, 10000) != NULL);
 	assert((c = lmmap_push_back(a, 20000)) != NULL);
 	lmmap_print_all(a);

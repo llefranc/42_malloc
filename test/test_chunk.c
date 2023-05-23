@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:34:48 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/23 12:02:28 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:27:37 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void test_chk_is_alloc_ok(void)
 void test_chk_alloc(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST chk_alloc <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	struct chkhdr *tmp;
 	lmmap_print_all(m);
 
@@ -66,7 +66,7 @@ void test_chk_alloc(void)
 void test_chk_moves(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST chk_moves <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	lmmap_print_all(m);
 
 	printf("-------- mmapheader before alloc --------\n");
@@ -119,7 +119,7 @@ static void print_free_chunks(struct chkhdr *first_free)
 void test_chk_free_basics(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST chk_free_basics <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	lmmap_print_all(m);
 
 	printf("-------- mmapheader before alloc --------\n");
@@ -155,7 +155,7 @@ void test_chk_free_basics(void)
 void test_chk_free_no_merge_one_big_chunk(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST test_chk_free_no_merge_one_big_chunk <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	lmmap_print_all(m);
 
 	struct chkhdr *hdr;
@@ -178,7 +178,7 @@ void test_chk_free_no_merge_one_big_chunk(void)
 void test_chk_free_no_merge_several_small_chunks(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST test_chk_free_no_merge_several_small_chunks <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	lmmap_print_all(m);
 
 	struct chkhdr *hdr1;
@@ -221,7 +221,7 @@ void test_chk_free_no_merge_several_small_chunks(void)
 void test_chk_free_merge_prev(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST test_chk_free_merge_prev <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	lmmap_print_all(m);
 
 	struct chkhdr *hdr1;
@@ -271,7 +271,7 @@ void test_chk_free_merge_prev(void)
 void test_chk_free_merge_next(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST test_chk_free_merge_next <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	lmmap_print_all(m);
 
 	struct chkhdr *hdr1;
@@ -321,7 +321,7 @@ void test_chk_free_merge_next(void)
 void test_chk_free_merge_prev_and_next(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST test_chk_free_merge_prev_and_next <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	lmmap_print_all(m);
 
 	struct chkhdr *hdr1;
@@ -370,7 +370,7 @@ void test_chk_free_merge_prev_and_next(void)
 void test_chk_free_all_with_all_cases(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST test_chk_free_all_with_all_cases <<<<<<<<<\n");
-	struct mmaphdr *m = lmmap_new(4000);
+	struct mmaphdr *m = lmmap_new(&m, 4000);
 	lmmap_print_all(m);
 
 	struct chkhdr *tmp;

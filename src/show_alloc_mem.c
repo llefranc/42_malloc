@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:51 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/05/21 21:34:22 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/23 13:32:37 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ static size_t print_bin(struct mmaphdr *bin)
 
 	if (!bin)
 		return 0;
-	last_chk_hdr = chk_ftoh(bin->last_chk);
 	while (bin) {
 		hdr = bin->first_chk;
+		last_chk_hdr = chk_ftoh(bin->last_chk);
 		while (hdr != last_chk_hdr) {
 			size += print_alloc_chk(hdr);
 			hdr = chk_next_hdr(hdr);
