@@ -79,6 +79,9 @@ static void init_first_free_chk(struct mmaphdr *m)
 	struct chkhdr *hdr = (struct chkhdr *)&m->start_chk;
 	struct chkftr *ftr;
 
+	/* Aligning chunk size on 16 */
+	chk_size &= 0xFFFFFFFFFFFFFFF0;
+
 	/* Init first chunk (one big free chunk) */
 	hdr->is_alloc = 0;
 	hdr->size = chk_size;

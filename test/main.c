@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/05/21 21:12:04 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:04:31 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int main(void)
 	// test_lmmap_rm_middle_elem();
 	// test_lmmap_rm_last_elem();
 
-	// test_chk_get_alloc_size();
 	// test_chk_is_alloc_ok();
 	// test_chk_alloc();
 	// test_chk_moves();
@@ -61,7 +60,7 @@ int main(void)
 	// test_chk_free_merge_prev_and_next();
 	// test_chk_free_all_with_all_cases();
 
-	test_show_alloc_mem_no_alloc();
+	// test_show_alloc_mem_no_alloc();
 
 	return 0;
 }

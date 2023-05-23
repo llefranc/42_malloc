@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:02:55 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/21 20:46:35 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:00:23 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,6 @@ static inline size_t get_16_aligned_size(size_t size)
 	while (size % 16 != 0)
 		++size;
 	return size;
-}
-
-/**
- * Take a size and return the corresponding allocating size (size value rounded
- * up to the closest multiple of 16 to align it + size of header +
- * size of footer).
-*/
-size_t chk_get_alloc_size(size_t size)
-{
-	return get_16_aligned_size(size) + BNDARY_TAG_SIZE * 2;
 }
 
 /**
@@ -120,8 +110,8 @@ void chk_print(struct chkhdr *hdr)
  * chunks, one allocated and one freed.
  *
  * @hdr: Header of a free chunk.
- * @size_alloc: The allocated size requested (must be align on 16, and must not
- *              contain the size of boundary tags).
+ * @size_alloc: The allocated size requested. Will be rounded up to the closest
+ *              multiple of 16 in order to aligned the chunk.
  * Return: A pointer to the header of the newly allocated chunk, NULL if the
  *         allocation is not possible (the targeted chunk is too small or is
  *         already allocated).
@@ -131,8 +121,10 @@ struct chkhdr * chk_alloc(struct chkhdr *hdr, size_t size_alloc)
 	struct chkftr *ftr = chk_htof(hdr);
 	struct chkhdr *new_hdr;
 	struct chkftr *new_ftr;
-	size_t size_free = hdr->size - size_alloc - (2 * BNDARY_TAG_SIZE);
+	size_t size_free;
 
+	size_alloc = get_16_aligned_size(size_alloc);
+	size_free = hdr->size - size_alloc - (2 * BNDARY_TAG_SIZE);
 	if (!hdr || !chk_is_alloc_ok(hdr, size_alloc))
 		return NULL;
 	if (hdr->size == size_alloc) {

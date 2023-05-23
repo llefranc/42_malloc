@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:34:48 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/21 20:34:00 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:02:28 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,14 @@
 #include <stdio.h>
 #include <assert.h>
 
-void test_chk_get_alloc_size(void)
-{
-	printf("\n>>>>>>>>> BEGIN TEST chk_get_alloc_size <<<<<<<<<\n");
-	for (int i = 0; i < 40; ++i) {
-		printf("aligned size for %d = %zu\n", i, chk_get_alloc_size(i));
-	}
-	printf("\n>>>>>>>>> END TEST chk_get_alloc_size <<<<<<<<<\n");
-}
-
 void test_chk_is_alloc_ok(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST chk_is_alloc_ok <<<<<<<<<\n");
 	struct chkhdr hdr;
-	size_t size = 5;
+	size_t size = 16;
 
-	size = chk_get_alloc_size(size);
-
-	hdr.size = 30;
-	for (; hdr.size < 55; hdr.size++) {
+	hdr.size = 0;
+	for (; hdr.size < 70; hdr.size++) {
 		printf("free chunk size = %zu, trying to alloc %zu bytes, is_fitting: "
 		       "%d\n", (size_t)hdr.size, size, chk_is_alloc_ok(&hdr, size));
 	}
@@ -60,17 +49,18 @@ void test_chk_alloc(void)
 	chk_print(tmp);
 	assert((tmp = chk_alloc(m->first_free.next_free, 48)) != NULL);
 	chk_print(tmp);
-	assert((tmp = chk_alloc(m->first_free.next_free, 32)) != NULL);
+	/* Will be round to 32 */
+	assert((tmp = chk_alloc(m->first_free.next_free, 20)) != NULL);
 	chk_print(tmp);
-	assert((tmp = chk_alloc(m->first_free.next_free, 3808)) != NULL);
+	assert((tmp = chk_alloc(m->first_free.next_free, 3792)) != NULL);
 
-	// Alloc should failed because too large
+	/* Alloc should failed because too large */
 	assert((tmp = chk_alloc(m->first_free.next_free, 128)) == NULL);
-	assert((tmp = chk_alloc(m->first_free.next_free, 40)) != NULL);
+	assert((tmp = chk_alloc(m->first_free.next_free, 16)) != NULL);
 	chk_print(tmp);
 
-	printf("\n>>>>>>>>> END TEST chk_alloc <<<<<<<<<\n");
 	print_mem(m, 4096);
+	printf("\n>>>>>>>>> END TEST chk_alloc <<<<<<<<<\n");
 }
 
 void test_chk_moves(void)
@@ -153,9 +143,9 @@ void test_chk_free_basics(void)
 
 	assert((hdr = chk_alloc(m->first_free.next_free, 32)) != NULL);
 
-	printf("-------- mmap after one alloc of 24 bytes --------\n");
+	printf("-------- mmap after one alloc of 32 bytes --------\n");
 	print_mem(m, 4096);
-	printf("-------- mmap after one alloc of 24 bytes --------\n");
+	printf("-------- mmap after one alloc of 32 bytes --------\n");
 	print_free_chunks(&m->first_free);
 
 	printf("\n>>>>>>>>> END TEST chk_free_basics <<<<<<<<<\n");
@@ -169,10 +159,10 @@ void test_chk_free_no_merge_one_big_chunk(void)
 	lmmap_print_all(m);
 
 	struct chkhdr *hdr;
-	assert((hdr = chk_alloc(m->first_free.next_free, 4008)) != NULL);
-	printf("-------- mmap after one alloc of 4008 bytes --------\n");
+	assert((hdr = chk_alloc(m->first_free.next_free, 4000)) != NULL);
+	printf("-------- mmap after one alloc of 4000 bytes --------\n");
 	print_mem(m, 128);
-	printf("-------- mmap after one alloc of 4008 bytes --------\n");
+	printf("-------- mmap after one alloc of 4000 bytes --------\n");
 
 
 	assert((hdr = chk_free(hdr, m->first_chk, m->last_chk, &m->first_free)) != NULL);
@@ -214,10 +204,10 @@ void test_chk_free_no_merge_several_small_chunks(void)
 	printf("-------- mmap after 6 allocs --------\n");
 
 	assert((hdr2 = chk_free(hdr2, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr2, (size_t)hdr2->size);
+	printf("chunk 2 at address %p is now free (size: %zu)\n", hdr2, (size_t)hdr2->size);
 
 	assert((hdr5 = chk_free(hdr5, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr5, (size_t)hdr5->size);
+	printf("chunk 5 at address %p is now free (size: %zu)\n", hdr5, (size_t)hdr5->size);
 
 	printf("-------- mmap after free block 2 and 5 --------\n");
 	print_mem(m, 368);
