@@ -6,7 +6,7 @@
 #    By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 12:10:01 by lucaslefran       #+#    #+#              #
-#    Updated: 2023/05/21 21:13:51 by llefranc         ###   ########.fr        #
+#    Updated: 2023/06/01 18:49:30 by llefranc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CC = gcc
 LIB_NAME = ft_malloc
 LIB_LINK_NAME = lib$(LIB_NAME).so
 LIB_FULL_NAME = lib$(LIB_NAME)_$(HOSTTYPE).so
-LIB_FLAGS = -fPIC -Wall -Werror -Wextra
+LIB_FLAGS = -fPIC -g -Wall -Werror -Wextra
 
 LIB_SRCS = free.c malloc.c realloc.c show_alloc_mem.c lmmap.c chunk.c
 LIB_OBJS = $(LIB_SRCS:.c=.o)
@@ -28,10 +28,11 @@ LIB_PATH = src/
 LIB_HEADS = allocator.h lmmap.h chunk.h
 
 # tester
-TEST_FLAGS = -Wall -Werror -Wextra
+TEST_FLAGS = -g -Wall -Werror -Wextra
 TEST_NAME = tester
 
-TEST_SRCS = main.c test_lmmap.c test_chunk.c test_show_alloc_mem.c
+TEST_SRCS = main.c utils.c test_lmmap.c test_chunk.c test_show_alloc_mem.c \
+		test_malloc_large.c test_malloc.c
 TEST_OBJS = $(TEST_SRCS:.c=.o)
 TEST_PATH = test/
 

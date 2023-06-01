@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:22 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/23 12:26:56 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/01 18:58:25 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void test_lmmap_get_size(void)
 	c.size = 3;
 	assert((size = lmmap_get_size(&a)) == 3);
 	printf("Size of list = %d\n", size);
+	
+	clear_bins();
 	printf("\n>>>>>>>>> END TEST lmmap_get_size <<<<<<<<<\n");
 }
 
@@ -52,6 +54,7 @@ void test_lmmap_new(void)
 	printf("New map of %d elems\n", lmmap_get_size(a));
 	printf("Dump of the 4096 bytes of the init mmap area:\n");
 	print_mem(a, 4096);
+	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_new <<<<<<<<<<\n");
 }
 
@@ -68,6 +71,7 @@ void test_lmmap_push_back(void)
 	assert(lmmap_push_back(a, 40000) != NULL);
 	lmmap_print_all(a);
 	printf("New map of %d elems\n", lmmap_get_size(a));
+	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_push_back <<<<<<<<<<\n");
 }
 
@@ -86,6 +90,7 @@ void test_lmmap_rm_first_elem(void)
 	assert(lmmap_rm_elem(a) != -1);
 	printf("New map of %d elems:\n", lmmap_get_size(b));
 	lmmap_print_all(b);
+	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_first_elem <<<<<<<<<<\n");
 }
 
@@ -104,6 +109,7 @@ void test_lmmap_rm_middle_elem(void)
 	assert(lmmap_rm_elem(b) != -1);
 	printf("New map of %d elems:\n", lmmap_get_size(a));
 	lmmap_print_all(a);
+	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_middle_elem <<<<<<<<<<\n");
 }
 
@@ -122,5 +128,6 @@ void test_lmmap_rm_last_elem(void)
 	assert(lmmap_rm_elem(c) != -1);
 	printf("New map of %d elems:\n", lmmap_get_size(a));
 	lmmap_print_all(a);
+	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_last_elem <<<<<<<<<<\n");
 }

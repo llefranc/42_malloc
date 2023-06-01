@@ -182,6 +182,31 @@ int lmmap_rm_elem(struct mmaphdr *elem)
 }
 
 /**
+ * Removes all the element from a mmap list and munmap their memory. Set the 
+ * head pointer of the mmap list to NULL.
+ * 
+ * @head: Head of the mmaps linked list.
+ * Return: 0 on success, -1 in case of error.
+*/
+int lmmap_clear(struct mmaphdr **head)
+{
+	struct mmaphdr *tmp;
+	struct mmaphdr *elem;
+
+	if (!head)
+		return 0;
+	elem = *head;
+	while (elem) {
+		tmp = elem->next;
+		if (munmap(elem, elem->size) == -1)
+			return -1;
+		elem = tmp;
+	}
+	*head = NULL;
+	return 0;
+}
+
+/**
  * Print infos of an elem from a linked list of mmaped area, using the struct
  * mmaphdr stored at the beginning of the mmap area.
  *

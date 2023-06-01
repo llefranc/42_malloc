@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:34:48 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/23 12:27:37 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/01 15:55:45 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,23 +97,6 @@ void test_chk_moves(void)
 	}
 	print_mem(m, 4096);
 	printf("\n>>>>>>>>> END TEST chk_moves <<<<<<<<<\n");
-}
-
-static void print_free_chunks(struct chkhdr *first_free)
-{
-	struct chkhdr *elem = first_free;
-	int i = 0;
-	printf("printing linked list of free blocks:\n");
-	while (elem != NULL) {
-		printf("-------------\n");
-		printf("free chunk nb %d\n", i++);
-		printf("address of free chunk: %p\n", elem);
-		printf("size of free chunk: %zu\n", (size_t)elem->size);
-		printf("address of prev free chunk: %p\n", elem->prev_free);
-		printf("address of next free chunk: %p\n", elem->next_free);
-		printf("-------------\n");
-		elem = elem->next_free;
-	}
 }
 
 void test_chk_free_basics(void)

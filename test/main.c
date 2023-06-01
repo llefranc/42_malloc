@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/05/23 12:04:31 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/01 18:58:47 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,31 +17,8 @@
 
 #include "test.h"
 
-#include <stdio.h>
-
-#include <stdint.h>
-#include <stddef.h>
-
-#include <stdlib.h>
-#include <limits.h>
-
-void print_mem(void *ptr, int nb_bytes)
-{
-	uint8_t *tmp = ptr;
-
-	for (int i = 0; i < nb_bytes; ++i) {
-		if (i % 16 == 0)
-			printf("\n0x%04x: ", i);
-		else if (i % 8 == 0)
-			printf("  ");
-		printf("%02x ", *tmp);
-		++tmp;
-	}
-	printf("\n");
-}
-
 int main(void)
-{
+{	
 	// test_lmmap_get_size();
 	// test_lmmap_new();
 	// test_lmmap_push_back();
@@ -60,7 +37,17 @@ int main(void)
 	// test_chk_free_merge_prev_and_next();
 	// test_chk_free_all_with_all_cases();
 
+	// test_malloc_large_one_alloc_one_page();
+	// test_malloc_large_one_alloc_multi_pages();
+	// test_malloc_large_one_exact_page_size();
+	// test_malloc_large_several_allocs();
+	// test_malloc_large_n_allocs_with_n_munmaps(100000);
+
 	// test_show_alloc_mem_no_alloc();
+	// test_show_alloc_mem_x_malloc(1, 2052);
+	// test_show_alloc_mem_x_malloc(5, 2052);
+	// test_show_alloc_mem_x_malloc(10, 2052);
+	// test_show_alloc_mem_x_malloc(10, 20000);
 
 	return 0;
 }

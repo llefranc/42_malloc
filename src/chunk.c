@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:02:55 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/23 12:00:23 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/01 17:11:22 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,6 @@ static void update_bnd_tags(struct chkhdr *hdr, struct chkftr *ftr,
 	hdr->size = size;
 	ftr->is_alloc = is_alloc;
 	ftr->size = size;
-}
-
-// to remove
-static void test_fill_data(struct chkhdr *hdr, struct chkftr *ftr)
-{
-	static char c = 'A';
-	uint8_t *ptr = ((uint8_t *)hdr) + BNDARY_TAG_SIZE;
-	uint8_t *end = (uint8_t *)ftr;
-
-	++c;
-	while (ptr != end) {
-		*ptr = c;
-		++ptr;
-	}
 }
 
 /**
@@ -131,7 +117,6 @@ struct chkhdr * chk_alloc(struct chkhdr *hdr, size_t size_alloc)
 		free_chunk_list_rm(hdr);
 		hdr->is_alloc = 1;
 		ftr->is_alloc = 1;
-		test_fill_data(hdr, ftr); // to remove
 	} else {
 		/* Updating new alloc chunk */
 		new_ftr = (struct chkftr *)((uint8_t *)hdr + BNDARY_TAG_SIZE +
@@ -144,7 +129,6 @@ struct chkhdr * chk_alloc(struct chkhdr *hdr, size_t size_alloc)
 		update_bnd_tags(new_hdr, ftr, 0, size_free);
 
 		free_chunk_list_insert(new_hdr, hdr->prev_free, hdr->next_free);
-		test_fill_data(hdr, new_ftr); // to remove
 	}
 	return hdr;
 }

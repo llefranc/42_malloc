@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:09:16 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/23 12:25:30 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/01 18:46:06 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
  * @start_chk: Padding field, not used. The address of this member will be the
  *             address of the header of the first chunk in the mmap area. It
  *             allows chunk's headers/footers to be aligned on 8, and the
- *             address returned from ft_malloc call (corresponding to the start
+ *             address returned from malloc call (corresponding to the start
  *             of the chunk's allocated area) to be aligned on 16.
 */
 struct mmaphdr {
@@ -53,6 +53,7 @@ int lmmap_get_size(struct mmaphdr *head);
 void * lmmap_new(struct mmaphdr **head, size_t size);
 void * lmmap_push_back(struct mmaphdr *head, size_t size);
 int lmmap_rm_elem(struct mmaphdr *elem);
+int lmmap_clear(struct mmaphdr **head);
 void lmmap_print_elem(struct mmaphdr *elem);
 void lmmap_print_all(struct mmaphdr *head);
 
