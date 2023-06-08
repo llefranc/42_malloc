@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chunk.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:02:55 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/01 17:11:22 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:19:53 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /**
  * Round up a size to the closest multiple of 16.
 */
-static inline size_t get_16_aligned_size(size_t size)
+size_t chk_size_16align(size_t size)
 {
 	while (size % 16 != 0)
 		++size;
@@ -109,7 +109,7 @@ struct chkhdr * chk_alloc(struct chkhdr *hdr, size_t size_alloc)
 	struct chkftr *new_ftr;
 	size_t size_free;
 
-	size_alloc = get_16_aligned_size(size_alloc);
+	size_alloc = chk_size_16align(size_alloc);
 	size_free = hdr->size - size_alloc - (2 * BNDARY_TAG_SIZE);
 	if (!hdr || !chk_is_alloc_ok(hdr, size_alloc))
 		return NULL;

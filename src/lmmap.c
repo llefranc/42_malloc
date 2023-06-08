@@ -182,9 +182,9 @@ int lmmap_rm_elem(struct mmaphdr *elem)
 }
 
 /**
- * Removes all the element from a mmap list and munmap their memory. Set the 
+ * Removes all the element from a mmap list and munmap their memory. Set the
  * head pointer of the mmap list to NULL.
- * 
+ *
  * @head: Head of the mmaps linked list.
  * Return: 0 on success, -1 in case of error.
 */
@@ -233,4 +233,36 @@ void lmmap_print_all(struct mmaphdr *head)
 		lmmap_print_elem(head);
 		head = head->next;
 	}
+}
+
+/**
+ * Search in a mmaps linked list the best free chunk that can be allocated for a
+ * specific size, e.g. the free chunk with the closest superior size to the
+ * requested size.
+ *
+ * @head: Head of the mmaps linked list.
+ * @size: The size to allocate.
+ * Return: A pointer to the best free chunk if one was found. NULL if there is
+ *         no free chunk or if the size specified could not fit in any of the
+ *         available free chunks.
+*/
+struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size)
+{
+	struct chkhdr *chk;
+	struct chkhdr *best = NULL;
+
+	while (head) {
+		chk = head->first_free.next_free;
+		while (chk) {
+			if (chk->size == size) {
+				return chk;
+			} else if (chk->size >= size &&
+			          (!best || chk->size < best->size)) {
+				best = chk;
+			}
+			chk = chk->next_free;
+		}
+		head = head->next;
+	}
+	return best;
 }

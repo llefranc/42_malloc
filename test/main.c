@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/01 18:58:47 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:05:08 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,9 @@
 #include "test.h"
 
 int main(void)
-{	
-	// test_lmmap_get_size();
-	// test_lmmap_new();
-	// test_lmmap_push_back();
-	// test_lmmap_rm_first_elem();
-	// test_lmmap_rm_middle_elem();
-	// test_lmmap_rm_last_elem();
-
+{
 	// test_chk_is_alloc_ok();
+	// test_chk_size_16align();
 	// test_chk_alloc();
 	// test_chk_moves();
 	// test_chk_free_basics();
@@ -36,6 +30,19 @@ int main(void)
 	// test_chk_free_merge_next();
 	// test_chk_free_merge_prev_and_next();
 	// test_chk_free_all_with_all_cases();
+
+	// test_lmmap_get_size();
+	// test_lmmap_new();
+	// test_lmmap_push_back();
+	// test_lmmap_rm_first_elem();
+	// test_lmmap_rm_middle_elem();
+	// test_lmmap_rm_last_elem();
+	// test_lmmap_bestfit_one_mmap_empty();
+	// test_lmmap_bestfit_one_mmap_full();
+	// test_lmmap_bestfit_two_mmap_all_empty();
+	// test_lmmap_bestfit_two_mmap_1st_full();
+	// test_lmmap_bestfit_two_mmap_all_full();
+	test_lmmap_bestfit_several_chunks();
 
 	// test_malloc_large_one_alloc_one_page();
 	// test_malloc_large_one_alloc_multi_pages();

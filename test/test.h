@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/01 18:47:34 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:05:04 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,8 @@ void print_free_chunks(struct chkhdr *first_free);
 void print_mem(void *ptr, int nb_bytes);
 void clear_bins(void);
 
-void test_lmmap_get_size(void);
-void test_lmmap_new(void);
-void test_lmmap_push_back(void);
-void test_lmmap_rm_first_elem(void);
-void test_lmmap_rm_middle_elem(void);
-void test_lmmap_rm_last_elem(void);
-
-void test_chk_get_alloc_size(void);
 void test_chk_is_alloc_ok(void);
+void test_chk_size_16align(void);
 void test_chk_alloc(void);
 void test_chk_moves(void);
 void test_chk_free_basics(void);
@@ -37,6 +30,19 @@ void test_chk_free_merge_prev(void);
 void test_chk_free_merge_next(void);
 void test_chk_free_merge_prev_and_next(void);
 void test_chk_free_all_with_all_cases(void);
+
+void test_lmmap_get_size(void);
+void test_lmmap_new(void);
+void test_lmmap_push_back(void);
+void test_lmmap_rm_first_elem(void);
+void test_lmmap_rm_middle_elem(void);
+void test_lmmap_rm_last_elem(void);
+void test_lmmap_bestfit_one_mmap_empty(void);
+void test_lmmap_bestfit_one_mmap_full(void);
+void test_lmmap_bestfit_two_mmap_all_empty(void);
+void test_lmmap_bestfit_two_mmap_1st_full(void);
+void test_lmmap_bestfit_two_mmap_all_full(void);
+void test_lmmap_bestfit_several_chunks(void);
 
 void test_malloc_with_size(size_t size);
 void test_malloc_n_allocs_with_n_munmaps(size_t nb_mallocs);

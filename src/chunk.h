@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chunk.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:03:44 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/23 11:49:51 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:20:27 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ static inline _Bool chk_is_alloc_ok(struct chkhdr *chk, size_t size)
 }
 
 void chk_print(struct chkhdr *hdr);
+size_t chk_size_16align(size_t size);
 struct chkhdr * chk_alloc(struct chkhdr *hdr, size_t size_alloc);
 struct chkhdr * chk_free(struct chkhdr *hdr, struct chkhdr *first_chk,
                          struct chkftr *last_chk, struct chkhdr *first_free);

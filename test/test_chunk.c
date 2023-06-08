@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_chunk.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:34:48 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/01 15:55:45 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:24:30 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,19 @@ void test_chk_is_alloc_ok(void)
 	}
 
 	printf("\n>>>>>>>>> END TEST chk_is_alloc_ok <<<<<<<<<\n");
+}
+
+void test_chk_size_16align(void)
+{
+	printf("\n>>>>>>>>> BEGIN TEST chk_size_16align <<<<<<<<<\n");
+	for (size_t size = 1; size < 33; ++size) {
+		if (size <= 16)
+			assert(chk_size_16align(size) == 16);
+		else
+			assert(chk_size_16align(size) == 32);
+	}
+	printf("success\n");
+	printf("\n>>>>>>>>> END TEST chk_size_16align <<<<<<<<<\n");
 }
 
 void test_chk_alloc(void)
