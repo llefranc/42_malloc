@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:26 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/08 17:45:56 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/09 17:00:09 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ static inline struct mmaphdr * create_bin(struct mmaphdr **head,
 	return lmmap_push_back(*head, mmap_size);
 }
 
+/**
+ * Allocate a tiny area of memory by finding the best free chunk avaible in the
+ * tiny bins. If this is the first tiny malloc that the process is doing or no
+ * free chunk are available, then create a new tiny bin and do the allocation
+ * inside.
+*/
 static struct chkhdr * alloc_tiny(size_t size)
 {
 	struct mmaphdr *new_m;
@@ -42,6 +48,12 @@ static struct chkhdr * alloc_tiny(size_t size)
 	return chk_alloc(chk, size);
 }
 
+/**
+ * Allocate a small area of memory by finding the best free chunk avaible in the
+ * small bins. If this is the first small malloc that the process is doing or no
+ * free chunk are available, then create a new small bin and do the allocation
+ * inside.
+*/
 static struct chkhdr * alloc_small(size_t size)
 {
 	struct mmaphdr *new_m;
@@ -79,18 +91,25 @@ static struct chkhdr * alloc_large(size_t size)
 	 * space is lost anyway.
 	 */
 	size = new_m->size - (sizeof(struct mmaphdr) + BNDARY_TAG_SIZE * 2);
-	if ((new_c = chk_alloc(new_m->first_chk, size)) == NULL)
-		return NULL;
-	new_m->nb_alloc++;
-	return new_c;
+	return chk_alloc(new_m->first_chk, size);
 }
 
+/**
+ * Allocate on the heap memory the requested size.
+ *
+ * @size: The size to allocate.
+ * Return: A pointer to the newly allocated area. NULL if size is 0 with errno
+ *         set to EINVAL, or NULL with errno set to ENOMEM if there is not
+ *         enough memory.
+*/
 void *ft_malloc(size_t size)
 {
 	struct chkhdr *new_alloc = NULL;
 
-	if (!size)
+	if (!size) {
+		errno = EINVAL;
 		return NULL;
+	}
 	if (size <= TINY_MAX_ALLOC_SIZE) {
 		new_alloc = alloc_tiny(size);
 	} else if (size <= SMALL_MAX_ALLOC_SIZE) {
