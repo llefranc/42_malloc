@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/08 16:05:08 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/09 16:23:29 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,17 @@ int main(void)
 	// test_lmmap_bestfit_two_mmap_all_empty();
 	// test_lmmap_bestfit_two_mmap_1st_full();
 	// test_lmmap_bestfit_two_mmap_all_full();
-	test_lmmap_bestfit_several_chunks();
+	// test_lmmap_bestfit_several_chunks();
+
+	// test_malloc_tiny_one_alloc_min_size();
+	// test_malloc_tiny_one_alloc_max_size();
+	// test_malloc_tiny_fill_one_mmap();
+	// test_malloc_tiny_all_values_from_tiny_range();
+
+	// test_malloc_small_one_alloc_min_size();
+	// test_malloc_small_one_alloc_max_size();
+	// test_malloc_small_fill_one_mmap();
+	// test_malloc_small_all_values_from_small_range();
 
 	// test_malloc_large_one_alloc_one_page();
 	// test_malloc_large_one_alloc_multi_pages();
@@ -50,7 +60,10 @@ int main(void)
 	// test_malloc_large_several_allocs();
 	// test_malloc_large_n_allocs_with_n_munmaps(100000);
 
+	test_malloc_zero();
+
 	// test_show_alloc_mem_no_alloc();
+	// test_show_alloc_mem_x_malloc(20, 1);
 	// test_show_alloc_mem_x_malloc(1, 2052);
 	// test_show_alloc_mem_x_malloc(5, 2052);
 	// test_show_alloc_mem_x_malloc(10, 2052);

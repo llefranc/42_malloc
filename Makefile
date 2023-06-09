@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+         #
+#    By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 12:10:01 by lucaslefran       #+#    #+#              #
-#    Updated: 2023/06/01 18:49:30 by llefranc         ###   ########.fr        #
+#    Updated: 2023/06/09 16:14:02 by lucaslefran      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ TEST_FLAGS = -g -Wall -Werror -Wextra
 TEST_NAME = tester
 
 TEST_SRCS = main.c utils.c test_lmmap.c test_chunk.c test_show_alloc_mem.c \
-		test_malloc_large.c test_malloc.c
+		test_malloc.c test_malloc_tiny.c test_malloc_small.c test_malloc_large.c
 TEST_OBJS = $(TEST_SRCS:.c=.o)
 TEST_PATH = test/
 
@@ -49,7 +49,7 @@ $(LIB_NAME): $(addprefix $(LIB_PATH), $(LIB_OBJS))
 # Building tester
 $(TEST_NAME): $(LIB_NAME) $(addprefix $(TEST_PATH), $(TEST_OBJS))
 	$(CC) -o $(TEST_NAME) $(TEST_FLAGS) $(addprefix $(TEST_PATH), $(TEST_SRCS)) \
-	-L. -Wl,-rpath=$(PWD) -l$(LIB_NAME)
+	-L. -Wl,-rpath $(PWD) -l$(LIB_NAME)
 
 clean:
 	rm -rf $(addprefix $(LIB_PATH), $(LIB_OBJS)) $(addprefix $(TEST_PATH), $(TEST_OBJS))

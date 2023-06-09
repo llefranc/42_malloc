@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/08 16:05:04 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/09 16:25:01 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,25 @@ void test_lmmap_bestfit_two_mmap_1st_full(void);
 void test_lmmap_bestfit_two_mmap_all_full(void);
 void test_lmmap_bestfit_several_chunks(void);
 
-void test_malloc_with_size(size_t size);
-void test_malloc_n_allocs_with_n_munmaps(size_t nb_mallocs);
+void test_malloc_tiny_one_alloc_min_size(void);
+void test_malloc_tiny_one_alloc_max_size(void);
+void test_malloc_tiny_fill_one_mmap(void);
+void test_malloc_tiny_all_values_from_tiny_range(void);
+
+void test_malloc_small_one_alloc_min_size(void);
+void test_malloc_small_one_alloc_max_size(void);
+void test_malloc_small_fill_one_mmap(void);
+void test_malloc_small_all_values_from_small_range(void);
 
 void test_malloc_large_one_alloc_one_page(void);
-void test_malloc_large_with_size(size_t size);
 void test_malloc_large_one_alloc_multi_pages(void);
 void test_malloc_large_one_exact_page_size(void);
 void test_malloc_large_several_allocs(void);
 void test_malloc_large_n_allocs_with_n_munmaps(size_t nb_mallocs);
+
+void test_malloc_zero(void);
+void test_malloc_with_size(size_t size);
+void test_malloc_n_allocs_with_n_munmaps(size_t nb_mallocs, size_t alloc_size);
 
 void test_show_alloc_mem_no_alloc(void);
 void test_show_alloc_mem_x_malloc(size_t nb_alloc, size_t start_alloc_size);

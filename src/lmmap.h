@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:09:16 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/08 15:06:16 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/09 15:50:38 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@
  *             of the chunk's allocated area) to be aligned on 16.
 */
 struct mmaphdr {
-	void *prev;
-	void *next;
+	struct mmaphdr *prev;
+	struct mmaphdr *next;
 	size_t size;
 	size_t nb_alloc;
 	struct chkhdr first_free;
