@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:26 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/09 17:00:09 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/11 17:32:53 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ static struct chkhdr * alloc_large(size_t size)
 	 * unused byte. So we do BNDARY_TAG_SIZE * 2 to count it.
 	 */
 	size_t mmap_size = size + sizeof(struct mmaphdr) + BNDARY_TAG_SIZE * 2;
-	struct chkhdr *new_c;
 	struct mmaphdr *new_m;
 
 	if ((new_m = create_bin(&bins.large, mmap_size)) == NULL)

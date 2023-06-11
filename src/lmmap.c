@@ -33,7 +33,7 @@ static size_t rnd_to_page_size(size_t size)
 /**
  * Return the number of elements in a list of mmaps.
  *
- * @head: Head of the mmaps linked list.
+ * @head: First element of the mmaps linked list.
 */
 int lmmap_get_size(struct mmaphdr *head)
 {
@@ -102,7 +102,7 @@ static void init_first_free_chk(struct mmaphdr *m)
  * Do a mmap and init at the beginning of the mmapped area the struct mmaphdr,
  * then set the head of the mmap linked list with the new mmap.
  *
- * @head: Head of the mmaps linked list.
+ * @head: First element of the mmaps linked list.
  * @size: The requested size for the mmap syscall. Size will be rounded up to
  *        a multiple of page_size.
  * Return: A pointer to the mmaped area which can be cast in struct mmaphdr
@@ -131,7 +131,7 @@ void * lmmap_new(struct mmaphdr **head, size_t size)
  * and add this new mmaped memory at the end of a mmap linked list represented
  * by head.
  *
- * @head: Head of the mmaps linked list.
+ * @head: First element of the mmaps linked list.
  * @size: The requested size for the mmap syscall. Size will be rounded up to
  *        a multiple of page_size.
  * Return: A pointer to the new mmaped area (e.g. the new elem at the end of
@@ -161,12 +161,15 @@ void * lmmap_push_back(struct mmaphdr *head, size_t size)
 }
 
 /**
- * Remove an elem from mmap list and munmap its memory.
+ * Remove an elem from mmap list and munmap its memory. If the element to remove
+ * is the head of the mmap linked list, update the head pointer by setting it
+ * to the next element or to NULL if the list was composed of only one elem.
  *
+ * @head: First element of the mmaps linked list.
  * @elem: The mmap elem to remove.
  * Return: 0 on success, -1 in case of error.
 */
-int lmmap_rm_elem(struct mmaphdr *elem)
+int lmmap_rm_elem(struct mmaphdr **head, struct mmaphdr *elem)
 {
 	struct mmaphdr *tmp;
 
@@ -178,6 +181,8 @@ int lmmap_rm_elem(struct mmaphdr *elem)
 		tmp = elem->next;
 		tmp->prev = elem->prev;
 	}
+	if (*head == elem)
+		*head = elem->next;
 	return munmap(elem, elem->size);
 }
 
@@ -185,7 +190,7 @@ int lmmap_rm_elem(struct mmaphdr *elem)
  * Removes all the element from a mmap list and munmap their memory. Set the
  * head pointer of the mmap list to NULL.
  *
- * @head: Head of the mmaps linked list.
+ * @head: First element of the mmaps linked list.
  * Return: 0 on success, -1 in case of error.
 */
 int lmmap_clear(struct mmaphdr **head)
@@ -225,7 +230,7 @@ void lmmap_print_elem(struct mmaphdr *elem)
 /**
  * Print the infos for each elem of a mmap linked list.
  *
- * @head: Head of the mmaps linked list.
+ * @head: First element of the mmaps linked list.
 */
 void lmmap_print_all(struct mmaphdr *head)
 {
@@ -240,11 +245,11 @@ void lmmap_print_all(struct mmaphdr *head)
  * specific size, e.g. the free chunk with the closest superior size to the
  * requested size.
  *
- * @head: Head of the mmaps linked list.
+ * @head: First element of the mmaps linked list.
  * @size: The size to allocate.
- * Return: A pointer to the best free chunk if one was found. NULL if there is
- *         no free chunk or if the size specified could not fit in any of the
- *         available free chunks.
+ * Return: A pointer to the header of the best free chunk if one was found.
+ *         NULL if there is no free chunk or if the size specified could not fit
+ *         in any of the available free chunks.
 */
 struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size)
 {

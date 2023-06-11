@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bins.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 11:28:19 by llefranc          #+#    #+#             */
-/*   Updated: 2023/05/21 20:59:54 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/11 17:14:39 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 (BIN_MAX_NB_ALLOC))
 
 #define SMALL_MAX_ALLOC_SIZE (512)
-#define SMALL_MAX_CHUNK_SIZE (SMALL_MAX_ALLOC_SIZE - 2 * BNDARY_TAG_SIZE)
+#define SMALL_MAX_CHUNK_SIZE (SMALL_MAX_ALLOC_SIZE + 2 * BNDARY_TAG_SIZE)
 #define SMALL_MMAP_SIZE (sizeof(struct mmaphdr) + (SMALL_MAX_CHUNK_SIZE) * \
 (BIN_MAX_NB_ALLOC))
 

@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/09 16:25:01 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/11 18:00:14 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void test_chk_free_all_with_all_cases(void);
 void test_lmmap_get_size(void);
 void test_lmmap_new(void);
 void test_lmmap_push_back(void);
+void test_lmmap_rm_one_elem(void);
 void test_lmmap_rm_first_elem(void);
 void test_lmmap_rm_middle_elem(void);
 void test_lmmap_rm_last_elem(void);

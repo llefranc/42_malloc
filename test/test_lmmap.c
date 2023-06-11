@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:22 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/08 17:04:50 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/11 18:00:57 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,21 +75,35 @@ void test_lmmap_push_back(void)
 	printf(">>>>>>>>>> END TEST lmmap_push_back <<<<<<<<<<\n");
 }
 
+void test_lmmap_rm_one_elem(void)
+{
+	printf("\n>>>>>>>>> BEGIN TEST lmmap_rm_one_elem <<<<<<<<<\n");
+	struct mmaphdr *head;
+
+	assert(lmmap_new(&head, 1000) != NULL);
+	lmmap_print_all(head);
+	printf("Erasing only elem in a mmap linked list composed of only one elem\n");
+	assert(lmmap_rm_elem(&head, head) != -1);
+	assert(head == NULL);
+	printf("Success: only elem erased and head pointer is now set to NULL\n");
+	clear_bins();
+	printf(">>>>>>>>>> END TEST lmmap_rm_one_elem <<<<<<<<<<\n");
+}
+
 void test_lmmap_rm_first_elem(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_rm_first_elem <<<<<<<<<\n");
-	struct mmaphdr *a;
-	struct mmaphdr *b;
+	struct mmaphdr *head;
 
-	assert(lmmap_new(&a, 1000) != NULL);
-	assert((b = lmmap_push_back(a, 10000)) != NULL);
-	assert(lmmap_push_back(a, 20000) != NULL);
-	lmmap_print_all(a);
+	assert(lmmap_new(&head, 1000) != NULL);
+	assert(lmmap_push_back(head, 10000) != NULL);
+	assert(lmmap_push_back(head, 20000) != NULL);
+	lmmap_print_all(head);
 
-	printf("\nlmmap rm first elem from list of %d elems:\n", lmmap_get_size(a));
-	assert(lmmap_rm_elem(a) != -1);
-	printf("New map of %d elems:\n", lmmap_get_size(b));
-	lmmap_print_all(b);
+	printf("\nlmmap rm first elem from list of %d elems:\n", lmmap_get_size(head));
+	assert(lmmap_rm_elem(&head, head) != -1);
+	printf("New map of %d elems:\n", lmmap_get_size(head));
+	lmmap_print_all(head);
 	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_first_elem <<<<<<<<<<\n");
 }
@@ -97,18 +111,18 @@ void test_lmmap_rm_first_elem(void)
 void test_lmmap_rm_middle_elem(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_rm_middle_elem <<<<<<<<<\n");
-	struct mmaphdr *a;
-	struct mmaphdr *b;
+	struct mmaphdr *head;
+	struct mmaphdr *middle;
 
-	assert(lmmap_new(&a, 1000) != NULL);
-	assert((b = lmmap_push_back(a, 10000)) != NULL);
-	assert(lmmap_push_back(a, 20000) != NULL);
-	lmmap_print_all(a);
+	assert(lmmap_new(&head, 1000) != NULL);
+	assert((middle = lmmap_push_back(head, 10000)) != NULL);
+	assert(lmmap_push_back(head, 20000) != NULL);
+	lmmap_print_all(head);
 
-	printf("\nlmmap rm middle elem from list of %d elems:\n", lmmap_get_size(a));
-	assert(lmmap_rm_elem(b) != -1);
-	printf("New map of %d elems:\n", lmmap_get_size(a));
-	lmmap_print_all(a);
+	printf("\nlmmap rm middle elem from list of %d elems:\n", lmmap_get_size(head));
+	assert(lmmap_rm_elem(&head, middle) != -1);
+	printf("New map of %d elems:\n", lmmap_get_size(head));
+	lmmap_print_all(head);
 	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_middle_elem <<<<<<<<<<\n");
 }
@@ -116,18 +130,18 @@ void test_lmmap_rm_middle_elem(void)
 void test_lmmap_rm_last_elem(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_rm_last_elem <<<<<<<<<\n");
-	struct mmaphdr *a;
-	struct mmaphdr *c;
+	struct mmaphdr *head;
+	struct mmaphdr *last;
 
-	assert(lmmap_new(&a, 1000) != NULL);
-	assert(lmmap_push_back(a, 10000) != NULL);
-	assert((c = lmmap_push_back(a, 20000)) != NULL);
-	lmmap_print_all(a);
+	assert(lmmap_new(&head, 1000) != NULL);
+	assert(lmmap_push_back(head, 10000) != NULL);
+	assert((last = lmmap_push_back(head, 20000)) != NULL);
+	lmmap_print_all(head);
 
-	printf("\nlmmap rm last elem from list of %d elems:\n", lmmap_get_size(a));
-	assert(lmmap_rm_elem(c) != -1);
-	printf("New map of %d elems:\n", lmmap_get_size(a));
-	lmmap_print_all(a);
+	printf("\nlmmap rm last elem from list of %d elems:\n", lmmap_get_size(head));
+	assert(lmmap_rm_elem(&head, last) != -1);
+	printf("New map of %d elems:\n", lmmap_get_size(head));
+	lmmap_print_all(head);
 	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_last_elem <<<<<<<<<<\n");
 }
