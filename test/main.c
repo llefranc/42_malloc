@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/15 07:55:46 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/15 14:16:21 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int main(void)
 	// test_lmmap_bestfit_two_mmap_1st_full();
 	// test_lmmap_bestfit_two_mmap_all_full();
 	// test_lmmap_bestfit_several_chunks();
+	// test_lmmap_get_elem();
 
 	// test_malloc_tiny_one_alloc_min_size();
 	// test_malloc_tiny_one_alloc_max_size();
@@ -66,16 +67,20 @@ int main(void)
 	// test_free_one_tiny();
 	// test_free_all_tiny_range();
 	// test_free_one_small();
-	test_free_all_small_range(); >>>> rajouter le print de small tiny a chaque mmap
+	// test_free_all_small_range();
 	// test_free_one_large();
 	// test_free_several_large();
 
 	// test_show_alloc_mem_no_alloc();
+	// test_show_alloc_mem_x_malloc(1, 1);
+	// test_show_alloc_mem_x_malloc(1, TINY_MAX_ALLOC_SIZE + 1);
+	// test_show_alloc_mem_x_malloc(1, SMALL_MAX_ALLOC_SIZE + 1);
 	// test_show_alloc_mem_x_malloc(20, 1);
 	// test_show_alloc_mem_x_malloc(1, 2052);
 	// test_show_alloc_mem_x_malloc(5, 2052);
 	// test_show_alloc_mem_x_malloc(10, 2052);
 	// test_show_alloc_mem_x_malloc(10, 20000);
+	// test_show_alloc_mem_empty_bin_in_the_middle();
 
 	return 0;
 }

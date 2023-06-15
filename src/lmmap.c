@@ -271,3 +271,27 @@ struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size)
 	}
 	return best;
 }
+
+/**
+ * Search in a mmaps linked list for the element containing the specified 
+ * address in its mmaps' address range.
+ * 
+ * @head: First element of the mmaps linked list.
+ * @addr: The address belonging to a mmap area.
+ * Return: A pointer to the mmap area containing in its address range the 
+ *         specified address, or NULL if there was no match.
+*/
+struct mmaphdr * lmmap_get_elem(struct mmaphdr *head, void *addr)
+{
+	void *bin_start_addr;
+	void *bin_end_addr;
+
+	while (head) {
+		bin_start_addr = head;
+		bin_end_addr = (void *)((uint8_t *)head + head->size);
+		if (addr >= bin_start_addr && addr < bin_end_addr)
+			break;
+		head = head->next;
+	}
+	return head;
+}

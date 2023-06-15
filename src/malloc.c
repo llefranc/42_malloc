@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   malloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:26 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/11 17:32:53 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/15 13:41:09 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,23 @@ static inline struct mmaphdr * create_bin(struct mmaphdr **head,
 */
 static struct chkhdr * alloc_tiny(size_t size)
 {
-	struct mmaphdr *new_m;
+	struct mmaphdr *bin;
 	struct chkhdr *chk;
-
+	
 	size = chk_size_16align(size);
-	if ((chk = lmmap_bestfit(bins.tiny, size)) == NULL) {
-		if ((new_m = create_bin(&bins.tiny, TINY_MMAP_SIZE)) == NULL)
+	chk = lmmap_bestfit(bins.tiny, size);
+	if (chk != NULL) {
+		if ((bin = lmmap_get_elem(bins.tiny, chk)) == NULL)
 			return NULL;
-		chk = new_m->first_free.next_free;
+	} else {
+		if ((bin = create_bin(&bins.tiny, TINY_MMAP_SIZE)) == NULL)
+			return NULL;
+		chk = bin->first_free.next_free;
 	}
-	return chk_alloc(chk, size);
+	if ((chk = chk_alloc(chk, size)) == NULL)
+		return NULL;
+	bin->nb_alloc++;
+	return chk;
 }
 
 /**
@@ -56,16 +63,23 @@ static struct chkhdr * alloc_tiny(size_t size)
 */
 static struct chkhdr * alloc_small(size_t size)
 {
-	struct mmaphdr *new_m;
+	struct mmaphdr *bin;
 	struct chkhdr *chk;
 
 	size = chk_size_16align(size);
-	if ((chk = lmmap_bestfit(bins.small, size)) == NULL) {
-		if ((new_m = create_bin(&bins.small, SMALL_MMAP_SIZE)) == NULL)
+	chk = lmmap_bestfit(bins.small, size);
+	if (chk != NULL) {
+		if ((bin = lmmap_get_elem(bins.small, chk)) == NULL)
 			return NULL;
-		chk = new_m->first_free.next_free;
+	} else {
+		if ((bin = create_bin(&bins.small, SMALL_MMAP_SIZE)) == NULL)
+			return NULL;
+		chk = bin->first_free.next_free;
 	}
-	return chk_alloc(chk, size);
+	if ((chk = chk_alloc(chk, size)) == NULL)
+		return NULL;
+	bin->nb_alloc++;
+	return chk;
 }
 
 /**
@@ -81,16 +95,20 @@ static struct chkhdr * alloc_large(size_t size)
 	 * unused byte. So we do BNDARY_TAG_SIZE * 2 to count it.
 	 */
 	size_t mmap_size = size + sizeof(struct mmaphdr) + BNDARY_TAG_SIZE * 2;
-	struct mmaphdr *new_m;
+	struct mmaphdr *bin;
+	struct chkhdr *chk;
 
-	if ((new_m = create_bin(&bins.large, mmap_size)) == NULL)
+	if ((bin = create_bin(&bins.large, mmap_size)) == NULL)
 		return NULL;
 	/*
 	 * Large allocated chunk will fit the whole mmap size because this
 	 * space is lost anyway.
 	 */
-	size = new_m->size - (sizeof(struct mmaphdr) + BNDARY_TAG_SIZE * 2);
-	return chk_alloc(new_m->first_chk, size);
+	size = bin->size - (sizeof(struct mmaphdr) + BNDARY_TAG_SIZE * 2);
+	if ((chk = chk_alloc(bin->first_chk, size)) == NULL)
+		return NULL;
+	bin->nb_alloc++;
+	return chk;
 }
 
 /**

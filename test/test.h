@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/15 07:56:18 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/15 14:08:49 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void test_lmmap_bestfit_two_mmap_all_empty(void);
 void test_lmmap_bestfit_two_mmap_1st_full(void);
 void test_lmmap_bestfit_two_mmap_all_full(void);
 void test_lmmap_bestfit_several_chunks(void);
+void test_lmmap_get_elem(void);
 
 void test_malloc_tiny_one_alloc_min_size(void);
 void test_malloc_tiny_one_alloc_max_size(void);
@@ -74,5 +75,6 @@ void test_free_several_large(void);
 
 void test_show_alloc_mem_no_alloc(void);
 void test_show_alloc_mem_x_malloc(size_t nb_alloc, size_t start_alloc_size);
+void test_show_alloc_mem_empty_bin_in_the_middle(void);
 
 #endif /* TEST_H */

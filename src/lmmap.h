@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lmmap.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:09:16 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/11 17:51:26 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/15 13:14:35 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ int lmmap_clear(struct mmaphdr **head);
 void lmmap_print_elem(struct mmaphdr *elem);
 void lmmap_print_all(struct mmaphdr *head);
 struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size);
+struct mmaphdr * lmmap_get_elem(struct mmaphdr *head, void *addr);
 
 #endif /* LMMAP_H */

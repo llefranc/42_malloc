@@ -16,28 +16,6 @@
 #include "lmmap.h"
 #include "chunk.h"
 
-static struct mmaphdr * find_bin(struct mmaphdr *head, void *chk_addr)
-{
-	void *bin_start_addr;
-	void *bin_end_addr;
-
-	while (head) {
-		bin_start_addr = head;
-		bin_end_addr = (void *)((uint8_t *)head + head->size);
-		if (chk_addr > bin_start_addr && chk_addr < bin_end_addr)
-			break;
-		head = head->next;
-	}
-	return head;
-}
-
-// static inline _Bool is_bin_empty(struct mmaphdr *bin)
-// {
-// 	return bin->first_free.next_free == NULL;
-// }
-
-// determiner dans quel bin se trouve le chunk a free grace a la size
-// rechopper le mmaphdr
 void ft_free(void *ptr)
 {
 	struct mmaphdr *head;
@@ -57,8 +35,10 @@ void ft_free(void *ptr)
 		} else {
 			head = bins.small;
 		}
-		bin = find_bin(head, chk);
-		chk_free(chk, bin->first_chk, bin->last_chk, &bin->first_free);
-		// faire fonction pour release les mmap si necessaire
+		bin = lmmap_get_elem(head, chk);
+		if (chk_free(chk, bin->first_chk, bin->last_chk, 
+		             &bin->first_free) != NULL) {
+			bin->nb_alloc--;
+		}
 	}
 }
