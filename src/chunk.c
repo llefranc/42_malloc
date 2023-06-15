@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:02:55 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/08 15:19:53 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/11 18:17:57 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ static int merge_next_chk(struct chkhdr *hdr, struct chkftr *ftr,
  * @hdr: The header of the chunk to free.
  * @first_chk: The header of the first chunk inside the mmap area (begin limit).
  * @last_chk: The footer of the last chunk inside the mmap area (end limit).
- * @first_free: The head of the free chunked linked list.
+ * @first_free: The head of the free chunked linked list stored inside the mmap.
  * Return: The header of the new free chunk, or NULL if the chunk is already
  *         free.
 */

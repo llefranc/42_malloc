@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/11 18:00:30 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/15 07:55:46 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int main(void)
 	// test_lmmap_get_size();
 	// test_lmmap_new();
 	// test_lmmap_push_back();
-	test_lmmap_rm_one_elem();
+	// test_lmmap_rm_one_elem();
 	// test_lmmap_rm_first_elem();
 	// test_lmmap_rm_middle_elem();
 	// test_lmmap_rm_last_elem();
@@ -62,6 +62,13 @@ int main(void)
 	// test_malloc_large_n_allocs_with_n_munmaps(100000);
 
 	// test_malloc_zero();
+
+	// test_free_one_tiny();
+	// test_free_all_tiny_range();
+	// test_free_one_small();
+	test_free_all_small_range(); >>>> rajouter le print de small tiny a chaque mmap
+	// test_free_one_large();
+	// test_free_several_large();
 
 	// test_show_alloc_mem_no_alloc();
 	// test_show_alloc_mem_x_malloc(20, 1);

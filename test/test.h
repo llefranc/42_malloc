@@ -6,7 +6,7 @@
 /*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/11 18:00:14 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/15 07:56:18 by lucaslefran      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,13 @@ void test_malloc_large_n_allocs_with_n_munmaps(size_t nb_mallocs);
 void test_malloc_zero(void);
 void test_malloc_with_size(size_t size);
 void test_malloc_n_allocs_with_n_munmaps(size_t nb_mallocs, size_t alloc_size);
+
+void test_free_one_tiny(void);
+void test_free_all_tiny_range(void);
+void test_free_one_small(void);
+void test_free_all_small_range(void);
+void test_free_one_large(void);
+void test_free_several_large(void);
 
 void test_show_alloc_mem_no_alloc(void);
 void test_show_alloc_mem_x_malloc(size_t nb_alloc, size_t start_alloc_size);
