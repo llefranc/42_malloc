@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/15 15:35:33 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/15 17:36:00 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void test_lmmap_bestfit_two_mmap_all_empty(void);
 void test_lmmap_bestfit_two_mmap_1st_full(void);
 void test_lmmap_bestfit_two_mmap_all_full(void);
 void test_lmmap_bestfit_several_chunks(void);
+void test_lmmap_bestfit_smallest_fit_possible(void);
 void test_lmmap_get_elem(void);
 
 void test_malloc_tiny_one_alloc_min_size(void);

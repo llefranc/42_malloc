@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chunk.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:03:44 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/08 15:20:27 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/15 18:02:17 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ static inline struct chkhdr * chk_next_hdr(struct chkhdr *hdr)
 /**
  * Check if the requested size can exactly fit in the specified free chunk,
  * otherwise check if the free chunk can be splitted into one with the specified
- * size and another chunk with at least a header and a footer.
+ * size and another chunk with at least a header (the header for free chunk,
+ * meaning size + prev_free and next_free pointers) and a footer.
  *
  * @chk: Header of the free chunk targeted for the allocation.
  * @size: The aligned size of the requested allocation (without the boundary

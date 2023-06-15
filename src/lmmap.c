@@ -242,8 +242,10 @@ void lmmap_print_all(struct mmaphdr *head)
 
 /**
  * Search in a mmaps linked list the best free chunk that can be allocated for a
- * specific size, e.g. the free chunk with the closest superior size to the
- * requested size.
+ * specific size, e.g. a free chunk with the exact requested size, or a free 
+ * chunk with the closest superior size to the requested size but that can still
+ * be  splitted into an allocated chunk and at least the minimum free chunk 
+ * possible.
  *
  * @head: First element of the mmaps linked list.
  * @size: The size to allocate.
@@ -261,8 +263,8 @@ struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size)
 		while (chk) {
 			if (chk->size == size) {
 				return chk;
-			} else if (chk->size >= size &&
-			          (!best || chk->size < best->size)) {
+			} else if (chk_is_alloc_ok(chk, size) && 
+				   (!best || chk->size < best->size)) {
 				best = chk;
 			}
 			chk = chk->next_free;
