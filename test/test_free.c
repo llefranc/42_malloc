@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_free.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 18:45:50 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/11 20:27:20 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/15 15:43:15 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,4 +182,26 @@ void test_free_several_large(void)
 
 	printf("\nElems successfully freed and bins.large correctly set to NULL\n");
 	printf("\n>>>>>>>>> END TEST free_several_large <<<<<<<<<\n");
+}
+
+void test_free_empty_bins(void)
+{
+	printf("\n>>>>>>>>> BEGIN TEST free_empty_all <<<<<<<<<\n");
+	void *ptr[500] = {};
+	int nb_allocs = 500;
+
+	for (int i = 0; i  < nb_allocs; ++i) {
+		assert((ptr[i] = ft_malloc(TINY_MAX_ALLOC_SIZE)) != NULL);
+	}
+	show_alloc_mem();
+	printf("Number of tiny bins %d\n", lmmap_get_size(bins.tiny));
+	for (int i = 0; i < nb_allocs; ++i)
+		ft_free(ptr[i]);
+	printf("All malloc succesfully freed\n");
+	printf("Number of tiny bins %d\n", lmmap_get_size(bins.tiny));
+
+	assert(lmmap_get_size(bins.tiny) == 1);
+	clear_bins();
+
+	printf("\n>>>>>>>>> END TEST free_empty_all <<<<<<<<<\n");	
 }

@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/15 14:08:49 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:35:33 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void test_free_one_small(void);
 void test_free_all_small_range(void);
 void test_free_one_large(void);
 void test_free_several_large(void);
+void test_free_empty_bins(void);
 
 void test_show_alloc_mem_no_alloc(void);
 void test_show_alloc_mem_x_malloc(size_t nb_alloc, size_t start_alloc_size);
