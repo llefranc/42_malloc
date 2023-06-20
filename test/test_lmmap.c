@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:22 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/15 17:45:40 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void test_lmmap_new(void)
 	assert(lmmap_new(&a, 1000) != NULL);
 	printf("New map of %d elems\n", lmmap_get_size(a));
 	printf("Dump of the 4096 bytes of the init mmap area:\n");
-	print_mem(a, 4096);
+	show_alloc_mem_ex(a, 4096);
 	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_new <<<<<<<<<<\n");
 }
@@ -158,7 +158,7 @@ void test_lmmap_bestfit_one_mmap_empty(void)
 
 	assert((best = lmmap_bestfit(a, 16)) == a->first_free.next_free);
 	printf("Bestfit is a chk with size = %zu (%#lx)\n", (size_t)best->size, (size_t)best->size);
-	print_mem(a, 4096);
+	show_alloc_mem_ex(a, 4096);
 
 	printf("\n>>>>>>>>> END TEST lmmap_bestfit_one_mmap_empty <<<<<<<<<\n");
 }
@@ -174,7 +174,7 @@ void test_lmmap_bestfit_one_mmap_full(void)
 	assert(chk_alloc(a->first_free.next_free, a->first_free.next_free->size) != NULL);
 	assert(lmmap_bestfit(a, 16) == NULL);
 	printf("No bestfit found\n");
-	print_mem(a, 4096);
+	show_alloc_mem_ex(a, 4096);
 
 	printf("\n>>>>>>>>> END TEST lmmap_bestfit_one_mmap_full <<<<<<<<<\n");
 }
@@ -193,9 +193,9 @@ void test_lmmap_bestfit_two_mmap_all_empty(void)
 	assert((best = lmmap_bestfit(a, 16)) == a->first_free.next_free);
 
 	printf("Dump of first mmap:\n");
-	print_mem(a, 4096);
+	show_alloc_mem_ex(a, 4096);
 	printf("\nDump of second mmap:\n");
-	print_mem(b, 4096);
+	show_alloc_mem_ex(b, 4096);
 	printf("Bestfit is a chk with size = %zu (%#lx)\n", (size_t)best->size, (size_t)best->size);
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_two_mmap_all_empty <<<<<<<<<\n");
 }
@@ -215,9 +215,9 @@ void test_lmmap_bestfit_two_mmap_1st_full(void)
 	assert((best = lmmap_bestfit(a, 16)) == b->first_free.next_free);
 
 	printf("Dump of first mmap:\n");
-	print_mem(a, 4096);
+	show_alloc_mem_ex(a, 4096);
 	printf("\nDump of second mmap:\n");
-	print_mem(b, 4096);
+	show_alloc_mem_ex(b, 4096);
 	printf("Bestfit is a chk with size = %zu (%#lx)\n", (size_t)best->size, (size_t)best->size);
 
 	printf("\n>>>>>>>>> END TEST lmmap_bestfit_two_mmap_1st_full <<<<<<<<<\n");
@@ -239,9 +239,9 @@ void test_lmmap_bestfit_two_mmap_all_full(void)
 	assert((best = lmmap_bestfit(a, 16)) == NULL);
 
 	printf("Dump of first mmap:\n");
-	print_mem(a, 4096);
+	show_alloc_mem_ex(a, 4096);
 	printf("\nDump of second mmap:\n");
-	print_mem(b, 4096);
+	show_alloc_mem_ex(b, 4096);
 	printf("no bestfit found\n");
 
 	printf("\n>>>>>>>>> END TEST lmmap_bestfit_two_mmap_all_full <<<<<<<<<\n");
@@ -322,9 +322,9 @@ void test_lmmap_bestfit_several_chunks(void)
 	}
 
 	printf("Dump of first mmap:\n");
-	print_mem(a, 4096);
+	show_alloc_mem_ex(a, 4096);
 	printf("\nDump of second mmap:\n");
-	print_mem(b, 4096);
+	show_alloc_mem_ex(b, 4096);
 
 	struct chkhdr *tmp = a->first_free.next_free;
 	printf("\nPrinting chk free sizes for 1st mmap:\n");
@@ -362,28 +362,28 @@ void test_lmmap_bestfit_smallest_fit_possible(void)
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_smallest_fit_possible <<<<<<<<<\n");
 	struct mmaphdr *a;
 
-	assert(lmmap_new(&a, 1000) != NULL);	
+	assert(lmmap_new(&a, 1000) != NULL);
 
 	printf("One empty mmap:\n");
-	print_mem(a, 256);
-	
+	show_alloc_mem_ex(a, 256);
+
 	assert(chk_alloc(a->first_free.next_free, 48) != NULL);
 	printf("First chk alloc (hdr->size = 48):\n");
-	print_mem(a, 256);
-	
+	show_alloc_mem_ex(a, 256);
+
 	assert(chk_alloc(a->first_free.next_free, 16) != NULL);
 	printf("First chk alloc just after (hdr->size = 16):\n");
-	print_mem(a, 256);
-	
+	show_alloc_mem_ex(a, 256);
+
 	assert(chk_free(a->first_chk, a->first_chk, a->last_chk, &a->first_free) != NULL);
 	printf("Freeing first chunk:\n");
-	print_mem(a, 256);
-	
+	show_alloc_mem_ex(a, 256);
+
 	assert(lmmap_bestfit(a, 16) == a->first_chk);
 	assert(chk_alloc(lmmap_bestfit(a, 16), 16) != NULL);
 	printf("Allocating 16 bytes inside first chunk which is now free:\n");
-	print_mem(a, 256);
-	
+	show_alloc_mem_ex(a, 256);
+
 	printf("\n>>>>>>>>> END TEST lmmap_bestfit_smallest_fit_possible <<<<<<<<<\n");
 }
 
@@ -391,7 +391,7 @@ void test_lmmap_get_elem(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_get_elem <<<<<<<<<\n");
 	printf("Testing several finds (all checked by assert)\n");
-	
+
 	struct mmaphdr *head;
 	struct mmaphdr *head2;
 	struct mmaphdr *elem;
@@ -399,14 +399,14 @@ void test_lmmap_get_elem(void)
 	assert(lmmap_new(&head, 1000) != NULL);
 	assert((elem = lmmap_push_back(head, 4096)) != NULL);
 	assert(lmmap_new(&head2, 10000) != NULL);
-	
+
 	assert(lmmap_get_elem(head, &head->first_free) == head);
 	assert(lmmap_get_elem(head, head->last_chk) == head);
 	assert(lmmap_get_elem(head, elem->last_chk) == elem);
 	assert(lmmap_get_elem(head2, elem->last_chk) == NULL);
 	assert(lmmap_get_elem(head2, head2) == head2);
 	assert(lmmap_get_elem(head2, (uint8_t*)head2 + head2->size) == NULL);
-	
+
 	printf("Success\n");
 	printf("\n>>>>>>>>> END TEST lmmap_get_elem <<<<<<<<<\n");
 }

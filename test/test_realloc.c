@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 14:19:49 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 17:03:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,14 @@ void test_realloc_inc_not_in_same_bin(void)
 	assert((ptr = ft_malloc(10)) != NULL);
 	memset(ptr, 'A', 10);
 	printf("\nallocating first in tiny:");
-	print_mem(bins.tiny, 128);
+	show_alloc_mem_ex(bins.tiny, 128);
 	show_alloc_mem();
 
 	printf("\nrealloc tiny to small:");
 	assert((ptr = ft_realloc(ptr, TINY_MAX_ALLOC_SIZE + 1)) != NULL);
 	assert(bins.tiny->nb_alloc == 0);
 	assert(bins.small->nb_alloc == 1);
-	print_mem(bins.small, 128);
+	show_alloc_mem_ex(bins.small, 128);
 	show_alloc_mem();
 
 	printf("\nrealloc small to large:");
@@ -89,7 +89,7 @@ void test_realloc_inc_not_in_same_bin(void)
 	assert(bins.tiny->nb_alloc == 0);
 	assert(bins.small->nb_alloc == 0);
 	assert(lmmap_get_size(bins.large) == 1);
-	print_mem(bins.large, 128);
+	show_alloc_mem_ex(bins.large, 128);
 	show_alloc_mem();
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST realloc_inc_not_in_same_bin <<<<<<<<<\n");
@@ -103,14 +103,14 @@ void test_realloc_dec_not_in_same_bin(void)
 	assert((ptr = ft_malloc(SMALL_MAX_ALLOC_SIZE + 1)) != NULL);
 	memset(ptr, 'A', SMALL_MAX_ALLOC_SIZE + 1);
 	printf("\nallocating first in large:");
-	print_mem(bins.large, 256);
+	show_alloc_mem_ex(bins.large, 256);
 	show_alloc_mem();
 
 	printf("\nrealloc large to small:");
 	assert((ptr = ft_realloc(ptr, TINY_MAX_ALLOC_SIZE + 1)) != NULL);
 	assert(bins.small->nb_alloc == 1);
 	assert(bins.large == NULL);
-	print_mem(bins.small, 256);
+	show_alloc_mem_ex(bins.small, 256);
 	show_alloc_mem();
 
 	printf("\nrealloc small to tiny:");
@@ -118,7 +118,7 @@ void test_realloc_dec_not_in_same_bin(void)
 	assert(bins.tiny->nb_alloc == 1);
 	assert(bins.small->nb_alloc == 0);
 	assert(bins.large == NULL);
-	print_mem(bins.tiny, 256);
+	show_alloc_mem_ex(bins.tiny, 256);
 	show_alloc_mem();
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST realloc_dec_not_in_same_bin <<<<<<<<<\n");
@@ -198,11 +198,11 @@ void test_realloc_dec_split_chunk(void)
 	assert(ft_realloc(ptr_small, size_small - 32) == ptr_small);
 
 	printf("New tiny bin after realloc dec:\n");
-	print_mem(bins.tiny, 256);
+	show_alloc_mem_ex(bins.tiny, 256);
 	print_free_chunks(&bins.tiny->first_free);
 
 	printf("New small bin after realloc dec:\n");
-	print_mem(bins.small, 1024);
+	show_alloc_mem_ex(bins.small, 1024);
 	print_free_chunks(&bins.small->first_free);
 	show_alloc_mem();
 
@@ -225,13 +225,13 @@ void test_realloc_dec_split_chunk_second_bin(void)
 
 	printf("Printing info of second mmap:\n");
 	assert(secbin->nb_alloc == 1);
-	print_mem(secbin, 256);
+	show_alloc_mem_ex(secbin, 256);
 	print_free_chunks(&secbin->first_free);
 
 	assert(ft_realloc(ptr_tiny, 1) == ptr_tiny);
 	printf("Printing info of second mmap after realloc to 1 byte:\n");
 	assert(secbin->nb_alloc == 1);
-	print_mem(secbin, 256);
+	show_alloc_mem_ex(secbin, 256);
 	print_free_chunks(&secbin->first_free);
 	show_alloc_mem();
 
@@ -261,7 +261,7 @@ void test_realloc_dec_split_chunk_merge(void)
 	printf("Freeing one chunk just after realloc:\n");
 	ft_free(ptr_free);
 	assert(bins.tiny->nb_alloc == 2);
-	print_mem(bins.tiny, 512);
+	show_alloc_mem_ex(bins.tiny, 512);
 	print_free_chunks(&bins.tiny->first_free);
 	show_alloc_mem();
 
@@ -269,7 +269,7 @@ void test_realloc_dec_split_chunk_merge(void)
 	assert(ft_realloc(ptr_tiny, size_tiny - 32) == ptr_tiny);
 	assert(bins.tiny->first_chk->size == size_tiny - 32);
 	assert(bins.tiny->nb_alloc == 2);
-	print_mem(bins.tiny, 512);
+	show_alloc_mem_ex(bins.tiny, 512);
 	print_free_chunks(&bins.tiny->first_free);
 	show_alloc_mem();
 
@@ -287,7 +287,7 @@ void test_realloc_dec_then_inc_same_bin(void)
 	assert((ptr_tiny = ft_malloc(size_tiny)) != NULL);
 	assert(bins.tiny->nb_alloc == 1);
 	memset(ptr_tiny, 'A', size_tiny);
-	print_mem(bins.tiny, 256);
+	show_alloc_mem_ex(bins.tiny, 256);
 	print_free_chunks(&bins.tiny->first_free);
 	show_alloc_mem();
 
@@ -295,7 +295,7 @@ void test_realloc_dec_then_inc_same_bin(void)
 	assert(ft_realloc(ptr_tiny, size_tiny - 32) == ptr_tiny);
 	assert(bins.tiny->first_chk->size == size_tiny - 32);
 	assert(bins.tiny->nb_alloc == 1);
-	print_mem(bins.tiny, 256);
+	show_alloc_mem_ex(bins.tiny, 256);
 	print_free_chunks(&bins.tiny->first_free);
 	show_alloc_mem();
 
@@ -304,7 +304,7 @@ void test_realloc_dec_then_inc_same_bin(void)
 	assert((res = ft_realloc(ptr_tiny, size_tiny)) != ptr_tiny);
 	memset(res, 'B', size_tiny);
 	assert(bins.tiny->nb_alloc == 1);
-	print_mem(bins.tiny, 256);
+	show_alloc_mem_ex(bins.tiny, 256);
 	print_free_chunks(&bins.tiny->first_free);
 	show_alloc_mem();
 
@@ -332,7 +332,7 @@ void test_realloc_dec_in_same_page_does_nothing(void)
 	assert(bins.large->nb_alloc == 1);
 	assert(bins.large->size == 4096);
 	memset(ptr_large, 'B', 2000);
-	print_mem(bins.large, 4096);
+	show_alloc_mem_ex(bins.large, 4096);
 	show_alloc_mem();
 
 	clear_bins();
@@ -359,7 +359,7 @@ void test_realloc_dec_trim_pages(void)
 	assert(bins.large->nb_alloc == 1);
 	assert(bins.large->size == 4096);
 	memset(ptr_large, 'B', 2000);
-	print_mem(bins.large, 4096);
+	show_alloc_mem_ex(bins.large, 4096);
 
 	show_alloc_mem();
 	clear_bins();
@@ -431,7 +431,7 @@ void test_realloc_inc_first_bin_range_all_values(void)
 		++letter;
 		++size;
 	}
-	print_mem(bins.large, 2000);
+	show_alloc_mem_ex(bins.large, 2000);
 
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST realloc_inc_first_bin_range_all_values <<<<<<<<<\n");
@@ -526,7 +526,7 @@ void test_realloc_inc_second_bin_range_all_values(void)
 		++letter;
 		++size;
 	}
-	print_mem(bins.large->next, 2000);
+	show_alloc_mem_ex(bins.large->next, 2000);
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST realloc_dec_second_bin_range_all_values <<<<<<<<<\n");
 }
@@ -574,7 +574,7 @@ void test_realloc_dec_first_bin_range_all_values(void)
 		++letter;
 		--size;
 	}
-	print_mem(bins.tiny, 2000);
+	show_alloc_mem_ex(bins.tiny, 2000);
 
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST realloc_dec_first_bin_range_all_values <<<<<<<<<\n");
@@ -644,7 +644,7 @@ void test_realloc_dec_second_bin_range_all_values(void)
 		++letter;
 		--size;
 	}
-	print_mem(bins.tiny->next, 2000);
+	show_alloc_mem_ex(bins.tiny->next, 2000);
 
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST test_realloc_dec_second_bin_range_all_values <<<<<<<<<\n");
@@ -660,7 +660,7 @@ void realloc_test_limits_between_pages(void)
 	assert((ptr = ft_realloc(ptr, 4000)) != NULL);
 	memset(ptr, 'A', 4000);
 	assert(bins.large->size == 4096);
-	print_mem(bins.large, 4096);
+	show_alloc_mem_ex(bins.large, 4096);
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST test_limits_between_bins <<<<<<<<<\n");
 }

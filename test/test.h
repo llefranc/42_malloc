@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 17:03:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "../src/chunk.h"
 
 void print_free_chunks(struct chkhdr *first_free);
-void print_mem(void *ptr, int nb_bytes);
+void show_alloc_mem_ex(void *ptr, int nb_bytes);
 void clear_bins(void);
 
 void test_chk_is_alloc_ok(void);

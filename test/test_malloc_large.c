@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 11:32:00 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/01 18:54:13 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void test_malloc_large_one_alloc_one_page(void)
 
 	assert((ptr = ft_malloc(large_nb)) != NULL);
 	memset(ptr, letter++, large_nb);
-	print_mem(bins.large, 4096);
+	show_alloc_mem_ex(bins.large, 4096);
 	print_free_chunks(&bins.large->first_free);
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_large_one_alloc_one_page <<<<<<<<<\n");
@@ -46,7 +46,7 @@ void test_malloc_large_one_alloc_multi_pages(void)
 
 	assert((ptr = ft_malloc(1000000)) != NULL);
 	memset(ptr, letter++, 1000000);
-	print_mem(bins.large, 128);
+	show_alloc_mem_ex(bins.large, 128);
 	print_free_chunks(&bins.large->first_free);
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_large_one_alloc_multi_pages <<<<<<<<<\n");
@@ -61,7 +61,7 @@ void test_malloc_large_one_exact_page_size(void)
 
 	assert((ptr = ft_malloc(alloc_size)) != NULL);
 	memset(ptr, letter++, alloc_size);
-	print_mem(bins.large, 4128);
+	show_alloc_mem_ex(bins.large, 4128);
 	print_free_chunks(&bins.large->first_free);
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_large_one_exact_page_size <<<<<<<<<\n");
@@ -87,13 +87,13 @@ void test_malloc_large_several_allocs(void)
 		printf("\n------------\n");
 		printf("\nlarge alloc nb %d\n", nb_allocs++);
 		printf("allocated size = %zu\n", (size_t)head->first_chk->size);
-		print_mem(head, 128);
+		show_alloc_mem_ex(head, 128);
 		print_free_chunks(&head->first_free);
 		head = head->next;
 	}
 
 	clear_bins();
-	printf("\n>>>>>>>>> END TEST malloc_large_several_allocs <<<<<<<<<\n");	
+	printf("\n>>>>>>>>> END TEST malloc_large_several_allocs <<<<<<<<<\n");
 }
 
 void test_malloc_large_n_allocs_with_n_munmaps(size_t nb_mallocs)
@@ -102,7 +102,7 @@ void test_malloc_large_n_allocs_with_n_munmaps(size_t nb_mallocs)
 	static char letter = 'A';
 	char *ptr;
 	size_t alloc_size = large_nb;
-	
+
 	printf("doing %zu large mallocs, with each one being immediately munmapped\n", nb_mallocs);
 	for (size_t i = 1; i < nb_mallocs; ++i) {
 		alloc_size = SMALL_MAX_ALLOC_SIZE + i;

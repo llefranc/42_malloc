@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 15:56:17 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/01 18:50:14 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <stddef.h>
 #include <assert.h>
 
-void print_mem(void *ptr, int nb_bytes)
+void show_alloc_mem_ex(void *ptr, int nb_bytes)
 {
 	uint8_t *tmp = ptr;
 

@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 18:45:50 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/15 15:43:15 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void test_free_one_tiny(void)
 	memset(ptr, letter++, chk_size_16align(1));
 	lmmap_print_all(bins.tiny);
 	show_alloc_mem();
-	print_mem(bins.tiny, 128);
+	show_alloc_mem_ex(bins.tiny, 128);
 
 	printf("\nfreeing one tiny chunk\n");
 	ft_free(ptr);
@@ -37,7 +37,7 @@ void test_free_one_tiny(void)
 	assert(bins.tiny->first_free.next_free->next_free == NULL);
 	printf("Elem successfully free, only one big free chunk in tiny bin\n");
 	show_alloc_mem();
-	print_mem(bins.tiny, 128);
+	show_alloc_mem_ex(bins.tiny, 128);
 	printf("\n>>>>>>>>> END TEST free_one_tiny <<<<<<<<<\n");
 }
 
@@ -66,7 +66,7 @@ void test_free_all_tiny_range(void)
 		assert(elem->first_free.next_free->next_free == NULL);
 		elem = elem->next;
 	}
-	print_mem(bins.tiny, 1024);
+	show_alloc_mem_ex(bins.tiny, 1024);
 	printf("all allocated chunks successfully freed\n");
 	printf("\n>>>>>>>>> END TEST free_all_tiny_range <<<<<<<<<\n");
 }
@@ -81,7 +81,7 @@ void test_free_one_small(void)
 	memset(ptr, letter++, chk_size_16align(TINY_MAX_ALLOC_SIZE + 1));
 	lmmap_print_all(bins.small);
 	show_alloc_mem();
-	print_mem(bins.small, 128);
+	show_alloc_mem_ex(bins.small, 128);
 
 	printf("\nfreeing one tiny chunk\n");
 	ft_free(ptr);
@@ -89,7 +89,7 @@ void test_free_one_small(void)
 	assert(bins.small->first_free.next_free->next_free == NULL);
 	printf("Elem successfully free, only one big free chunk in tiny bin\n");
 	show_alloc_mem();
-	print_mem(bins.small, 128);
+	show_alloc_mem_ex(bins.small, 128);
 	printf("\n>>>>>>>>> END TEST free_one_small <<<<<<<<<\n");
 }
 
@@ -118,7 +118,7 @@ void test_free_all_small_range(void)
 		assert(elem->first_free.next_free->next_free == NULL);
 		elem = elem->next;
 	}
-	print_mem(bins.small, 1024);
+	show_alloc_mem_ex(bins.small, 1024);
 	printf("all allocated chunks successfully freed\n");
 	printf("\n>>>>>>>>> END TEST free_all_small_range <<<<<<<<<\n");
 }
@@ -135,7 +135,7 @@ void test_free_one_large(void)
 	memset(ptr, letter++, chk_size_16align(large_size));
 	lmmap_print_all(bins.large);
 	show_alloc_mem();
-	print_mem(bins.large, 128);
+	show_alloc_mem_ex(bins.large, 128);
 	printf("freeing the large chunk\n");
 	ft_free(ptr);
 	assert(bins.large == NULL);
@@ -203,5 +203,5 @@ void test_free_empty_bins(void)
 	assert(lmmap_get_size(bins.tiny) == 1);
 	clear_bins();
 
-	printf("\n>>>>>>>>> END TEST free_empty_all <<<<<<<<<\n");	
+	printf("\n>>>>>>>>> END TEST free_empty_all <<<<<<<<<\n");
 }

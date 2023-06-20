@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_malloc_small.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:05:22 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/09 16:16:59 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void test_malloc_small_one_alloc_min_size(void)
 
 	assert((ptr = ft_malloc(small_min_nb)) != NULL);
 	memset(ptr, letter++, chk_size_16align(small_min_nb));
-	print_mem(bins.small, 4096);
+	show_alloc_mem_ex(bins.small, 4096);
 	print_free_chunks(&bins.small->first_free);
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_small_one_alloc_min_size <<<<<<<<<\n");
@@ -46,7 +46,7 @@ void test_malloc_small_one_alloc_max_size(void)
 
 	assert((ptr = ft_malloc(small_max_nb)) != NULL);
 	memset(ptr, letter++, chk_size_16align(small_max_nb));
-	print_mem(bins.small, 4096);
+	show_alloc_mem_ex(bins.small, 4096);
 	print_free_chunks(&bins.small->first_free);
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_small_one_alloc_max_size <<<<<<<<<\n");
@@ -62,7 +62,7 @@ void test_malloc_small_fill_one_mmap(void)
 		assert((ptr = ft_malloc(small_max_nb)) != NULL);
 		memset(ptr, letter++, chk_size_16align(small_max_nb));
 	}
-	print_mem(bins.small->next, 4096);
+	show_alloc_mem_ex(bins.small->next, 4096);
 	printf("first mmap:\n");
 	print_free_chunks(&bins.small->first_free);
 	printf("second mmap:\n");
@@ -85,7 +85,7 @@ void test_malloc_small_all_values_from_small_range(void)
 		memset(ptr, letter++, chk_size_16align(size));
 	}
 	printf("all alloc success\n");
-	print_mem(bins.small, small_bin_size);
+	show_alloc_mem_ex(bins.small, small_bin_size);
 	show_alloc_mem();
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_small_all_values_from_small_range <<<<<<<<<\n");
