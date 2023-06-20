@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:03:44 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/15 18:02:17 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/19 18:19:36 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ static inline struct chkhdr * chk_next_hdr(struct chkhdr *hdr)
 static inline _Bool chk_is_alloc_ok(struct chkhdr *chk, size_t size)
 {
 	return !chk->is_alloc && (chk->size == size || chk->size >= (size +
-	       sizeof(struct chkhdr) + sizeof(struct chkftr)));
+	       sizeof(struct chkftr) + sizeof(struct chkhdr)));
 }
 
 void chk_print(struct chkhdr *hdr);

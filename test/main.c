@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/15 15:42:40 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:34:19 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int main(void)
 	// test_lmmap_bestfit_two_mmap_1st_full();
 	// test_lmmap_bestfit_two_mmap_all_full();
 	// test_lmmap_bestfit_several_chunks();
+	// test_lmmap_bestfit_smallest_fit_possible();
 	// test_lmmap_get_elem();
 
 	// test_malloc_tiny_one_alloc_min_size();
@@ -70,7 +71,24 @@ int main(void)
 	// test_free_all_small_range();
 	// test_free_one_large();
 	// test_free_several_large();
-	test_free_empty_bins();
+	// test_free_empty_bins();
+
+	// test_realloc_ptr_null();
+	// test_realloc_size_0();
+	// test_realloc_inc_not_in_same_bin();
+	// test_realloc_dec_not_in_same_bin();
+	// test_realloc_same_size();
+	// test_realloc_dec_but_not_enough_space_to_split();
+	// test_realloc_dec_split_chunk();
+	// test_realloc_dec_split_chunk_second_bin();
+	// test_realloc_dec_split_chunk_merge();
+	// test_realloc_dec_then_inc_same_bin();
+	// test_realloc_dec_in_same_page_does_nothing();
+	// test_realloc_dec_trim_pages();
+	// test_realloc_inc_first_bin_range_all_values();
+	// test_realloc_inc_second_bin_range_all_values();
+	// test_realloc_dec_first_bin_range_all_values();
+	// test_realloc_dec_second_bin_range_all_values();
 
 	// test_show_alloc_mem_no_alloc();
 	// test_show_alloc_mem_x_malloc(1, 1);

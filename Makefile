@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+         #
+#    By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 12:10:01 by lucaslefran       #+#    #+#              #
-#    Updated: 2023/06/11 18:56:12 by lucaslefran      ###   ########.fr        #
+#    Updated: 2023/06/19 15:43:56 by llefranc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ TEST_NAME = tester
 
 TEST_SRCS = main.c utils.c test_lmmap.c test_chunk.c test_show_alloc_mem.c \
 		test_malloc.c test_malloc_tiny.c test_malloc_small.c \
-		test_malloc_large.c test_free.c
+		test_malloc_large.c test_free.c test_realloc.c
 TEST_OBJS = $(TEST_SRCS:.c=.o)
 TEST_PATH = test/
 

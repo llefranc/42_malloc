@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:26 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/15 13:41:09 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/19 12:27:50 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,17 +115,15 @@ static struct chkhdr * alloc_large(size_t size)
  * Allocate on the heap memory the requested size.
  *
  * @size: The size to allocate.
- * Return: A pointer to the newly allocated area. NULL if size is 0 with errno
- *         set to EINVAL, or NULL with errno set to ENOMEM if there is not
- *         enough memory.
+ * Return: A pointer to the newly allocated area. NULL with errno set to ENOMEM 
+ *         if there is not enough memory.
 */
 void *ft_malloc(size_t size)
 {
 	struct chkhdr *new_alloc = NULL;
 
 	if (!size) {
-		errno = EINVAL;
-		return NULL;
+		size = 1;
 	}
 	if (size <= TINY_MAX_ALLOC_SIZE) {
 		new_alloc = alloc_tiny(size);

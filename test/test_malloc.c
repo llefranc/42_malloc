@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_malloc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 17:39:29 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/09 16:24:46 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/19 12:24:28 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,11 @@
 void test_malloc_zero(void)
 {
 	printf("\n>>>>>>>>> BEGIN TEST malloc_zero <<<<<<<<<\n");
-	printf("doing an alloc of 0, should failed\n");
-	assert(ft_malloc(0) == NULL);
+	printf("doing an alloc of 0, should do a tiny alloc\n");
+	assert(ft_malloc(0) != NULL);
+	print_mem(bins.tiny, 128);
+	assert(bins.tiny->nb_alloc == 1);
+	clear_bins();
 	printf("Success!\n");
 	printf("\n>>>>>>>>> END TEST malloc_zero <<<<<<<<<\n");
 }

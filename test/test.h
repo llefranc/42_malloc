@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/15 17:36:00 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:11:06 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,23 @@ void test_free_all_small_range(void);
 void test_free_one_large(void);
 void test_free_several_large(void);
 void test_free_empty_bins(void);
+
+void test_realloc_ptr_null(void);
+void test_realloc_size_0(void);
+void test_realloc_inc_not_in_same_bin(void);
+void test_realloc_dec_not_in_same_bin(void);
+void test_realloc_same_size(void);
+void test_realloc_dec_but_not_enough_space_to_split(void);
+void test_realloc_dec_split_chunk(void);
+void test_realloc_dec_split_chunk_merge(void);
+void test_realloc_dec_then_inc_same_bin(void);
+void test_realloc_dec_split_chunk_second_bin(void);
+void test_realloc_dec_in_same_page_does_nothing(void);
+void test_realloc_dec_trim_pages(void);
+void test_realloc_inc_first_bin_range_all_values(void);
+void test_realloc_inc_second_bin_range_all_values(void);
+void test_realloc_dec_first_bin_range_all_values(void);
+void test_realloc_dec_second_bin_range_all_values(void);
 
 void test_show_alloc_mem_no_alloc(void);
 void test_show_alloc_mem_x_malloc(size_t nb_alloc, size_t start_alloc_size);
