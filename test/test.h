@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:31 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 16:11:06 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:03:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void test_realloc_inc_first_bin_range_all_values(void);
 void test_realloc_inc_second_bin_range_all_values(void);
 void test_realloc_dec_first_bin_range_all_values(void);
 void test_realloc_dec_second_bin_range_all_values(void);
+void realloc_test_limits_between_pages(void);
 
 void test_show_alloc_mem_no_alloc(void);
 void test_show_alloc_mem_x_malloc(size_t nb_alloc, size_t start_alloc_size);

@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 14:19:49 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 16:35:29 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:03:32 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -648,4 +648,19 @@ void test_realloc_dec_second_bin_range_all_values(void)
 
 	clear_bins();
 	printf("\n>>>>>>>>> END TEST test_realloc_dec_second_bin_range_all_values <<<<<<<<<\n");
+}
+
+void realloc_test_limits_between_pages(void)
+{
+	printf("\n>>>>>>>>> BEGIN TEST test_limits_between_bins <<<<<<<<<\n");
+	void *ptr;
+	printf("Creating a large alloc of 4001 bytes (2 pages):\n");
+	assert((ptr = ft_malloc(4001)) != NULL);
+	assert(bins.large->size == 8192);
+	assert((ptr = ft_realloc(ptr, 4000)) != NULL);
+	memset(ptr, 'A', 4000);
+	assert(bins.large->size == 4096);
+	print_mem(bins.large, 4096);
+	clear_bins();
+	printf("\n>>>>>>>>> END TEST test_limits_between_bins <<<<<<<<<\n");
 }

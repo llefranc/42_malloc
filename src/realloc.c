@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:55 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/20 16:37:38 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:24:55 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static _Bool is_in_same_bin(size_t a, size_t b)
 /**
  * Return the corresponding bin of a chunk based on its size and its address.
 */
-struct mmaphdr * get_bin(void *alloc_addr, size_t alloc_size)
+static struct mmaphdr * get_bin(void *alloc_addr, size_t alloc_size)
 {
 	struct mmaphdr *head;
 
@@ -110,6 +110,46 @@ static void trim_pages(struct mmaphdr *bin, struct chkhdr *hdr,
 	}
 }
 
+/**
+ * A new alloc is needed when the aligned allocation size requested is:
+ *   - Superior to the actual chunk size available.
+ *   - Not a size containable in the actual allocation's bin, in order to keep
+ *     all the chunks inside a bin with the same range of sizes to avoid
+ *     fragmentation.
+ *
+ * Ex: alloc_size: 32           chk_size: 12           >>> new alloc
+ *     alloc_size: 3000 (LARGE) chk_size: 4000 (LARGE) >>> no new alloc
+ *     alloc_size: 32           chk_size: 32           >>> no new alloc
+ *     alloc_size: 32 (TINY)    chk_size: 500 (SMALL)  >>> new alloc
+*/
+static inline _Bool is_new_alloc(size_t size_alloc, size_t chk_size)
+{
+	return size_alloc > chk_size || !is_in_same_bin(size_alloc, chk_size);
+}
+
+/**
+ * A decrease of the allocated area occurs when the aligned allocation size
+ * requested is smaller than the chunk capacity and that it's possible to
+ * split the chunk into an allocated chunk with the new size and a freed
+ * chunk (only for SMALL and TINY chunks).
+*/
+static inline _Bool is_decrease(size_t size_alloc, size_t chk_size)
+{
+	return chk_size >= (size_alloc + sizeof(struct chkftr) +
+	       sizeof(struct chkhdr));
+}
+
+/**
+ * Reallocate on the heap memory the requested size. Avoid to move the data
+ * when it's possible.
+ *
+ * @ptr: A pointer to a previously allocated area using ft_malloc. If NULL,
+ *       then a malloc with size as parameter is performed (even if size=0).
+ * @size: The size of the new allocation. If size=0, then a free on ptr is
+ *        performed.
+ * Return: A pointer to the reallocated area, or NULL with errno set to ENOMEM
+ *         if there was not enough memory.
+*/
 void *ft_realloc(void *ptr, size_t size)
 {
 	struct mmaphdr *bin;
@@ -126,8 +166,7 @@ void *ft_realloc(void *ptr, size_t size)
 	size_alloc = chk_size_16align(size);
 	chk = (struct chkhdr *)((uint8_t *)ptr - BNDARY_TAG_SIZE);
 
-	 // superior, ou nouvelle size n'appartient pas au meme bin, on realloc
-	if (size_alloc > chk->size || !is_in_same_bin(size_alloc, chk->size)) {
+	if (is_new_alloc(size_alloc, chk->size)) {
 		if ((new_alloc = ft_malloc(size)) == NULL)
 			return NULL;
 		if (size > chk->size)
@@ -136,19 +175,13 @@ void *ft_realloc(void *ptr, size_t size)
 			memcpy(new_alloc, ptr, size);
 		ft_free(ptr);
 		return new_alloc;
-	}
-	// same_size or inferior but can't split. Does nothing. >> a reprendre +
-	// peut etre mettre la size pour les larges aussi ?
-	if ((size_alloc == chk->size) || !(chk->size >= (size_alloc +
-	    sizeof(struct chkftr) + sizeof(struct chkhdr))))
-		return ptr;
-
-	// inferior sizes in same bin, large case
-	bin = get_bin(ptr, size);
-	if (size_alloc > SMALL_MAX_ALLOC_SIZE) {
-		trim_pages(bin, chk, size_alloc);
-	} else {
-		split_chk(bin, chk, size_alloc);
+	} else if (is_decrease(size_alloc, chk->size)) {
+		bin = get_bin(ptr, size);
+		if (size_alloc > SMALL_MAX_ALLOC_SIZE) {
+			trim_pages(bin, chk, size_alloc);
+		} else {
+			split_chk(bin, chk, size_alloc);
+		}
 	}
 	return ptr;
 }
