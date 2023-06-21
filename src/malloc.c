@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:26 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/21 11:16:14 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:43:13 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ static struct chkhdr * alloc_large(size_t size)
  * Return: A pointer to the newly allocated area. NULL with errno set to ENOMEM
  *         if there is not enough memory.
 */
-void *ft_malloc(size_t size)
+void *malloc(size_t size)
 {
 	struct chkhdr *new_alloc = NULL;
 

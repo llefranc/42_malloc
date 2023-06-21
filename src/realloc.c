@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:55 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/21 11:23:46 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:29:47 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,14 +144,14 @@ static inline _Bool is_decrease(size_t size_alloc, size_t chk_size)
  * Reallocate on the heap memory the requested size. Avoid to move the data
  * when it's possible.
  *
- * @ptr: A pointer to a previously allocated area using ft_malloc. If NULL,
+ * @ptr: A pointer to a previously allocated area using malloc. If NULL,
  *       then a malloc with size as parameter is performed (even if size=0).
  * @size: The size of the new allocation. If size=0, then a free on ptr is
  *        performed.
  * Return: A pointer to the reallocated area, or NULL with errno set to ENOMEM
  *         if there was not enough memory.
 */
-void *ft_realloc(void *ptr, size_t size)
+void *realloc(void *ptr, size_t size)
 {
 	struct mmaphdr *bin;
 	struct chkhdr *chk;
@@ -160,23 +160,23 @@ void *ft_realloc(void *ptr, size_t size)
 
 	mutex_lock();
 	if (!ptr) {
-		ptr = ft_malloc(size);
+		ptr = malloc(size);
 		goto end;
 	} else if (!size) {
-		ft_free(ptr);
+		free(ptr);
 		goto end_null;
 	}
 	size_alloc = chk_size_16align(size);
 	chk = (struct chkhdr *)((uint8_t *)ptr - BNDARY_TAG_SIZE);
 
 	if (is_new_alloc(size_alloc, chk->size)) {
-		if ((new_alloc = ft_malloc(size)) == NULL)
+		if ((new_alloc = malloc(size)) == NULL)
 			goto end_null;
 		if (size > chk->size)
 			memcpy(new_alloc, ptr, chk->size);
 		else
 			memcpy(new_alloc, ptr, size);
-		ft_free(ptr);
+		free(ptr);
 		ptr = new_alloc;
 	} else if (is_decrease(size_alloc, chk->size)) {
 		bin = get_bin(ptr, size);
