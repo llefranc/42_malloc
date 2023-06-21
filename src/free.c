@@ -12,13 +12,14 @@
 
 #include "allocator.h"
 
+#include "mutex.h"
 #include "bins.h"
 #include "lmmap.h"
 #include "chunk.h"
 
 /**
  * Iterate through a mmaps linked list, and if several empty mmaps exist,
- * munmap all of them until only one remain. 
+ * munmap all of them until only one remain.
 */
 static void free_empty_bins(struct mmaphdr *head)
 {
@@ -33,7 +34,7 @@ static void free_empty_bins(struct mmaphdr *head)
 				++nb_empty;
 			else
 				lmmap_rm_elem(&head, elem);
-				
+
 		}
 		elem = tmp;
 	}
@@ -41,7 +42,7 @@ static void free_empty_bins(struct mmaphdr *head)
 
 /**
  * Free an allocated area on the heap.
- * 
+ *
  * @ptr: A pointer to an allocated area previously returned by malloc call. Do
  *       nothing if this pointer is NULL.
 */
@@ -53,6 +54,7 @@ void ft_free(void *ptr)
 
 	if (!ptr)
 		return;
+	mutex_lock();
 	chk = (struct chkhdr *)((uint8_t *)ptr - BNDARY_TAG_SIZE);
 	if (chk->size > SMALL_MAX_ALLOC_SIZE) {
 		bin = (struct mmaphdr *)((uint8_t *)chk + BNDARY_TAG_SIZE
@@ -65,10 +67,11 @@ void ft_free(void *ptr)
 			head = bins.small;
 		}
 		bin = lmmap_get_elem(head, chk);
-		if (chk_free(chk, bin->first_chk, bin->last_chk, 
+		if (chk_free(chk, bin->first_chk, bin->last_chk,
 		             &bin->first_free) != NULL) {
 			bin->nb_alloc--;
 		}
 		free_empty_bins(head);
 	}
+	mutex_unlock();
 }

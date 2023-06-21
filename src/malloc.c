@@ -6,12 +6,13 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:26 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/19 12:27:50 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:16:14 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "allocator.h"
 
+#include "mutex.h"
 #include "bins.h"
 #include "lmmap.h"
 #include "chunk.h"
@@ -38,7 +39,7 @@ static struct chkhdr * alloc_tiny(size_t size)
 {
 	struct mmaphdr *bin;
 	struct chkhdr *chk;
-	
+
 	size = chk_size_16align(size);
 	chk = lmmap_bestfit(bins.tiny, size);
 	if (chk != NULL) {
@@ -115,13 +116,14 @@ static struct chkhdr * alloc_large(size_t size)
  * Allocate on the heap memory the requested size.
  *
  * @size: The size to allocate.
- * Return: A pointer to the newly allocated area. NULL with errno set to ENOMEM 
+ * Return: A pointer to the newly allocated area. NULL with errno set to ENOMEM
  *         if there is not enough memory.
 */
 void *ft_malloc(size_t size)
 {
 	struct chkhdr *new_alloc = NULL;
 
+	mutex_lock();
 	if (!size) {
 		size = 1;
 	}
@@ -136,5 +138,6 @@ void *ft_malloc(size_t size)
 		errno = ENOMEM;
 		return NULL;
 	}
+	mutex_unlock();
 	return (void *)(((uint8_t *)new_alloc) + BNDARY_TAG_SIZE);
 }

@@ -6,12 +6,13 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:51 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/15 14:12:40 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:12:16 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "allocator.h"
 
+#include "mutex.h"
 #include "bins.h"
 #include "lmmap.h"
 #include "chunk.h"
@@ -49,7 +50,7 @@ static size_t print_bin(struct mmaphdr **bin, const char *name)
 			size += print_alloc_chk(hdr);
 			hdr = chk_next_hdr(hdr);
 		}
-		size += print_alloc_chk(hdr);		
+		size += print_alloc_chk(hdr);
 	}
 	*bin = (*bin)->next;
 	return size;
@@ -65,7 +66,8 @@ void show_alloc_mem(void)
 	struct mmaphdr *tbin = bins.tiny;
 	struct mmaphdr *sbin = bins.small;
 	struct mmaphdr *lbin = bins.large;
-	
+
+	mutex_lock();
 	printf("############### SHOW_ALLOC_MEM ###############\n");
 	printf("Allocated memory:\n");
 	while (tbin || sbin || lbin) {
@@ -74,9 +76,10 @@ void show_alloc_mem(void)
 		} else if (sbin && (!lbin || sbin < lbin)) {
 			size += print_bin(&sbin, "SMALL");
 		} else if (lbin) {
-			size += print_bin(&lbin, "LARGE");	
+			size += print_bin(&lbin, "LARGE");
 		}
-	}	
+	}
 	printf("Total : %zu bytes\n", size);
 	printf("##############################################\n");
+	mutex_unlock();
 }

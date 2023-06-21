@@ -6,12 +6,13 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:55 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/20 17:24:55 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:23:46 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "allocator.h"
 
+#include "mutex.h"
 #include "chunk.h"
 #include "bins.h"
 
@@ -157,24 +158,26 @@ void *ft_realloc(void *ptr, size_t size)
 	size_t size_alloc;
 	void *new_alloc;
 
+	mutex_lock();
 	if (!ptr) {
-		return ft_malloc(size);
+		ptr = ft_malloc(size);
+		goto end;
 	} else if (!size) {
 		ft_free(ptr);
-		return NULL;
+		goto end_null;
 	}
 	size_alloc = chk_size_16align(size);
 	chk = (struct chkhdr *)((uint8_t *)ptr - BNDARY_TAG_SIZE);
 
 	if (is_new_alloc(size_alloc, chk->size)) {
 		if ((new_alloc = ft_malloc(size)) == NULL)
-			return NULL;
+			goto end_null;
 		if (size > chk->size)
 			memcpy(new_alloc, ptr, chk->size);
 		else
 			memcpy(new_alloc, ptr, size);
 		ft_free(ptr);
-		return new_alloc;
+		ptr = new_alloc;
 	} else if (is_decrease(size_alloc, chk->size)) {
 		bin = get_bin(ptr, size);
 		if (size_alloc > SMALL_MAX_ALLOC_SIZE) {
@@ -183,5 +186,11 @@ void *ft_realloc(void *ptr, size_t size)
 			split_chk(bin, chk, size_alloc);
 		}
 	}
+end:
+	mutex_unlock();
 	return ptr;
+
+end_null:
+	mutex_unlock();
+	return NULL;
 }
