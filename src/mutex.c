@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 11:06:10 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/21 11:36:58 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:56:04 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 #include <pthread.h>
 
-pthread_once_t once = PTHREAD_ONCE_INIT;
-pthread_mutex_t mutex;
-pthread_mutexattr_t attr;
+static pthread_mutex_t mutex;
+static pthread_once_t once = PTHREAD_ONCE_INIT;
+static pthread_mutexattr_t attr;
 
 /**
  * Init a mutex as a recursive mutex.
