@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:05:22 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:29:19 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ const size_t small_bin_size = SMALL_MMAP_SIZE % 4096 ?
 
 void test_malloc_small_one_alloc_min_size(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_small_one_alloc_min_size <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -34,12 +35,12 @@ void test_malloc_small_one_alloc_min_size(void)
 	memset(ptr, letter++, chk_size_16align(small_min_nb));
 	show_alloc_mem_ex(bins.small, 4096);
 	print_free_chunks(&bins.small->first_free);
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_small_one_alloc_min_size <<<<<<<<<\n");
 }
 
 void test_malloc_small_one_alloc_max_size(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_small_one_alloc_max_size <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -48,12 +49,12 @@ void test_malloc_small_one_alloc_max_size(void)
 	memset(ptr, letter++, chk_size_16align(small_max_nb));
 	show_alloc_mem_ex(bins.small, 4096);
 	print_free_chunks(&bins.small->first_free);
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_small_one_alloc_max_size <<<<<<<<<\n");
 }
 
 void test_malloc_small_fill_one_mmap(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_small_fill_one_mmap <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -68,12 +69,12 @@ void test_malloc_small_fill_one_mmap(void)
 	printf("second mmap:\n");
 	print_free_chunks(&bins.small->next->first_free);
 	show_alloc_mem();
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_small_fill_one_mmap <<<<<<<<<\n");
 }
 
 void test_malloc_small_all_values_from_small_range(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_small_all_values_from_small_range <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -87,6 +88,5 @@ void test_malloc_small_all_values_from_small_range(void)
 	printf("all alloc success\n");
 	show_alloc_mem_ex(bins.small, small_bin_size);
 	show_alloc_mem();
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_small_all_values_from_small_range <<<<<<<<<\n");
 }

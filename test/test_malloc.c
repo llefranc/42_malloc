@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 17:39:29 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:29:44 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,19 @@
 
 void test_malloc_zero(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_zero <<<<<<<<<\n");
 	printf("doing an alloc of 0, should do a tiny alloc\n");
 	assert(ft_malloc(0) != NULL);
 	show_alloc_mem_ex(bins.tiny, 128);
 	assert(bins.tiny->nb_alloc == 1);
-	clear_bins();
 	printf("Success!\n");
 	printf("\n>>>>>>>>> END TEST malloc_zero <<<<<<<<<\n");
 }
 
 void test_malloc_with_size(size_t size)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_with_size <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -50,6 +51,7 @@ void test_malloc_with_size(size_t size)
 
 void test_malloc_n_allocs_with_n_munmaps(size_t nb_mallocs, size_t alloc_size)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_n_allocs_with_n_munmaps <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;

@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 18:45:50 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:27:07 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 void test_free_one_tiny(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST free_one_tiny <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -43,6 +44,7 @@ void test_free_one_tiny(void)
 
 void test_free_all_tiny_range(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST free_all_tiny_range <<<<<<<<<\n");
 	static char letter = 'A';
 	char *arr[TINY_MAX_ALLOC_SIZE];
@@ -73,6 +75,7 @@ void test_free_all_tiny_range(void)
 
 void test_free_one_small(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST free_one_small <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -95,6 +98,7 @@ void test_free_one_small(void)
 
 void test_free_all_small_range(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST free_all_small_range <<<<<<<<<\n");
 	static char letter = 'A';
 	char *arr[SMALL_MAX_ALLOC_SIZE - TINY_MAX_ALLOC_SIZE];
@@ -125,6 +129,7 @@ void test_free_all_small_range(void)
 
 void test_free_one_large(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST free_one_large <<<<<<<<<\n");
 	size_t large_size = SMALL_MAX_ALLOC_SIZE + 1;
 
@@ -145,6 +150,7 @@ void test_free_one_large(void)
 
 void test_free_several_large(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST free_several_large <<<<<<<<<\n");
 	size_t large_size = SMALL_MAX_ALLOC_SIZE + 1;
 
@@ -152,6 +158,7 @@ void test_free_several_large(void)
 	char *ptr1;
 	char *ptr2;
 	char *ptr3;
+
 	printf("allocating 3 large malloc\n");
 	assert((ptr1 = ft_malloc(large_size)) != NULL);
 	memset(ptr1, letter++, chk_size_16align(large_size));
@@ -186,6 +193,7 @@ void test_free_several_large(void)
 
 void test_free_empty_bins(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST free_empty_all <<<<<<<<<\n");
 	void *ptr[500] = {};
 	int nb_allocs = 500;
@@ -201,7 +209,6 @@ void test_free_empty_bins(void)
 	printf("Number of tiny bins %d\n", lmmap_get_size(bins.tiny));
 
 	assert(lmmap_get_size(bins.tiny) == 1);
-	clear_bins();
 
 	printf("\n>>>>>>>>> END TEST free_empty_all <<<<<<<<<\n");
 }

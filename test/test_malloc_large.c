@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 11:32:00 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:29:04 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ const size_t large_nb = SMALL_MAX_ALLOC_SIZE + 16;
 
 void test_malloc_large_one_alloc_one_page(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_large_one_alloc_one_page <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -34,12 +35,12 @@ void test_malloc_large_one_alloc_one_page(void)
 	memset(ptr, letter++, large_nb);
 	show_alloc_mem_ex(bins.large, 4096);
 	print_free_chunks(&bins.large->first_free);
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_large_one_alloc_one_page <<<<<<<<<\n");
 }
 
 void test_malloc_large_one_alloc_multi_pages(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_large_one_alloc_multi_pages <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -48,12 +49,12 @@ void test_malloc_large_one_alloc_multi_pages(void)
 	memset(ptr, letter++, 1000000);
 	show_alloc_mem_ex(bins.large, 128);
 	print_free_chunks(&bins.large->first_free);
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_large_one_alloc_multi_pages <<<<<<<<<\n");
 }
 
 void test_malloc_large_one_exact_page_size(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_large_one_exact_page_size <<<<<<<<<\n");
 	size_t alloc_size = 4096 - sizeof(struct mmaphdr) - BNDARY_TAG_SIZE;
 	static char letter = 'A';
@@ -63,12 +64,12 @@ void test_malloc_large_one_exact_page_size(void)
 	memset(ptr, letter++, alloc_size);
 	show_alloc_mem_ex(bins.large, 4128);
 	print_free_chunks(&bins.large->first_free);
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_large_one_exact_page_size <<<<<<<<<\n");
 }
 
 void test_malloc_large_several_allocs(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_large_several_allocs <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -92,12 +93,12 @@ void test_malloc_large_several_allocs(void)
 		head = head->next;
 	}
 
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST malloc_large_several_allocs <<<<<<<<<\n");
 }
 
 void test_malloc_large_n_allocs_with_n_munmaps(size_t nb_mallocs)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST malloc_large_n_allocs_with_n_munmaps <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;

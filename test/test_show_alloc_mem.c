@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/21 21:10:43 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/15 14:18:44 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:31:02 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void test_show_alloc_mem_no_alloc(void)
 
 void test_show_alloc_mem_x_malloc(size_t nb_alloc, size_t start_alloc_size)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST show_alloc_mem_x_malloc <<<<<<<<<\n");
 	static char letter = 'A';
 	char *ptr;
@@ -35,18 +36,18 @@ void test_show_alloc_mem_x_malloc(size_t nb_alloc, size_t start_alloc_size)
 		printf("allocating size %zu\n", alloc_size);
 		assert((ptr = ft_malloc(alloc_size)) != NULL);
 		memset(ptr, letter++, alloc_size);
-		alloc_size *= 2;		
+		alloc_size *= 2;
 	}
 	show_alloc_mem();
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST show_alloc_mem_x_malloc <<<<<<<<<\n");
 }
 
 void test_show_alloc_mem_empty_bin_in_the_middle(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST show_alloc_mem_empty_bin_in_the_middle <<<<<<<<<\n");
 	struct mmaphdr *last;
-	
+
 	assert(ft_malloc(1) != NULL);
 	assert(lmmap_push_back(bins.tiny, TINY_MMAP_SIZE) != NULL);
 	assert((last = lmmap_push_back(bins.tiny, TINY_MMAP_SIZE)) != NULL);
@@ -54,7 +55,6 @@ void test_show_alloc_mem_empty_bin_in_the_middle(void)
 	last->nb_alloc++;
 	show_alloc_mem();
 	printf("2 allocs should be displayed\n");
-	clear_bins();
 	printf("\n>>>>>>>>> END TEST show_alloc_mem_empty_bin_in_the_middle <<<<<<<<<\n");
-	
+
 }

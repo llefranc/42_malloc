@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 16:25:22 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/21 11:28:16 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 void test_lmmap_get_size(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_get_size <<<<<<<<<\n");
 	int size;
 	struct mmaphdr a;
@@ -41,12 +42,13 @@ void test_lmmap_get_size(void)
 	assert((size = lmmap_get_size(&a)) == 3);
 	printf("Size of list = %d\n", size);
 
-	clear_bins();
+
 	printf("\n>>>>>>>>> END TEST lmmap_get_size <<<<<<<<<\n");
 }
 
 void test_lmmap_new(void)
 {
+	clear_bins();
 	struct mmaphdr *a;
 
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_new <<<<<<<<<\n");
@@ -55,12 +57,12 @@ void test_lmmap_new(void)
 	printf("New map of %d elems\n", lmmap_get_size(a));
 	printf("Dump of the 4096 bytes of the init mmap area:\n");
 	show_alloc_mem_ex(a, 4096);
-	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_new <<<<<<<<<<\n");
 }
 
 void test_lmmap_push_back(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_push_back <<<<<<<<<\n");
 	struct mmaphdr *a;
 
@@ -72,12 +74,12 @@ void test_lmmap_push_back(void)
 	assert(lmmap_push_back(a, 40000) != NULL);
 	lmmap_print_all(a);
 	printf("New map of %d elems\n", lmmap_get_size(a));
-	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_push_back <<<<<<<<<<\n");
 }
 
 void test_lmmap_rm_one_elem(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_rm_one_elem <<<<<<<<<\n");
 	struct mmaphdr *head;
 
@@ -87,12 +89,12 @@ void test_lmmap_rm_one_elem(void)
 	assert(lmmap_rm_elem(&head, head) != -1);
 	assert(head == NULL);
 	printf("Success: only elem erased and head pointer is now set to NULL\n");
-	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_one_elem <<<<<<<<<<\n");
 }
 
 void test_lmmap_rm_first_elem(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_rm_first_elem <<<<<<<<<\n");
 	struct mmaphdr *head;
 
@@ -105,12 +107,12 @@ void test_lmmap_rm_first_elem(void)
 	assert(lmmap_rm_elem(&head, head) != -1);
 	printf("New map of %d elems:\n", lmmap_get_size(head));
 	lmmap_print_all(head);
-	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_first_elem <<<<<<<<<<\n");
 }
 
 void test_lmmap_rm_middle_elem(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_rm_middle_elem <<<<<<<<<\n");
 	struct mmaphdr *head;
 	struct mmaphdr *middle;
@@ -124,12 +126,12 @@ void test_lmmap_rm_middle_elem(void)
 	assert(lmmap_rm_elem(&head, middle) != -1);
 	printf("New map of %d elems:\n", lmmap_get_size(head));
 	lmmap_print_all(head);
-	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_middle_elem <<<<<<<<<<\n");
 }
 
 void test_lmmap_rm_last_elem(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_rm_last_elem <<<<<<<<<\n");
 	struct mmaphdr *head;
 	struct mmaphdr *last;
@@ -143,12 +145,12 @@ void test_lmmap_rm_last_elem(void)
 	assert(lmmap_rm_elem(&head, last) != -1);
 	printf("New map of %d elems:\n", lmmap_get_size(head));
 	lmmap_print_all(head);
-	clear_bins();
 	printf(">>>>>>>>>> END TEST lmmap_rm_last_elem <<<<<<<<<<\n");
 }
 
 void test_lmmap_bestfit_one_mmap_empty(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_one_mmap_empty <<<<<<<<<\n");
 	struct mmaphdr *a;
 	struct chkhdr *best;
@@ -165,6 +167,7 @@ void test_lmmap_bestfit_one_mmap_empty(void)
 
 void test_lmmap_bestfit_one_mmap_full(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_one_mmap_full <<<<<<<<<\n");
 	struct mmaphdr *a;
 
@@ -181,6 +184,7 @@ void test_lmmap_bestfit_one_mmap_full(void)
 
 void test_lmmap_bestfit_two_mmap_all_empty(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_two_mmap_all_empty <<<<<<<<<\n");
 	struct mmaphdr *a;
 	struct mmaphdr *b;
@@ -202,6 +206,7 @@ void test_lmmap_bestfit_two_mmap_all_empty(void)
 
 void test_lmmap_bestfit_two_mmap_1st_full(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_two_mmap_1st_full <<<<<<<<<\n");
 	struct mmaphdr *a;
 	struct mmaphdr *b;
@@ -225,6 +230,7 @@ void test_lmmap_bestfit_two_mmap_1st_full(void)
 
 void test_lmmap_bestfit_two_mmap_all_full(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_two_mmap_all_full <<<<<<<<<\n");
 	struct mmaphdr *a;
 	struct mmaphdr *b;
@@ -254,6 +260,7 @@ static int comp_size(const void *a, const void *b)
 
 void test_lmmap_bestfit_several_chunks(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_several_chunks <<<<<<<<<\n");
 	struct mmaphdr *a;
 	struct mmaphdr *b;
@@ -359,6 +366,7 @@ void test_lmmap_bestfit_several_chunks(void)
 
 void test_lmmap_bestfit_smallest_fit_possible(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_bestfit_smallest_fit_possible <<<<<<<<<\n");
 	struct mmaphdr *a;
 
@@ -389,6 +397,7 @@ void test_lmmap_bestfit_smallest_fit_possible(void)
 
 void test_lmmap_get_elem(void)
 {
+	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST lmmap_get_elem <<<<<<<<<\n");
 	printf("Testing several finds (all checked by assert)\n");
 
