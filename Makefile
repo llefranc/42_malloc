@@ -6,7 +6,7 @@
 #    By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/20 12:10:01 by lucaslefran       #+#    #+#              #
-#    Updated: 2023/06/21 11:12:42 by llefranc         ###   ########.fr        #
+#    Updated: 2023/06/21 11:44:47 by llefranc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CC = gcc
 LIB_NAME = ft_malloc
 LIB_LINK_NAME = lib$(LIB_NAME).so
 LIB_FULL_NAME = lib$(LIB_NAME)_$(HOSTTYPE).so
-LIB_FLAGS = -fPIC -g -Wall -Werror -Wextra -lpthread
+LIB_FLAGS = -fPIC -g -Wall -Werror -Wextra -pthread
 
 LIB_SRCS = free.c malloc.c realloc.c show_alloc_mem.c lmmap.c chunk.c mutex.c
 LIB_OBJS = $(LIB_SRCS:.c=.o)
