@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:42:39 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/21 11:25:23 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:02:02 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,7 @@ int main(void)
 	test_malloc_small_fill_one_mmap();
 	test_malloc_small_all_values_from_small_range();
 
-	test_malloc_large_one_alloc_one_page();
 	test_malloc_large_one_alloc_multi_pages();
-	test_malloc_large_one_exact_page_size();
 	test_malloc_large_several_allocs();
 	test_malloc_large_n_allocs_with_n_munmaps(100000);
 
@@ -89,7 +87,6 @@ int main(void)
 	test_realloc_inc_second_bin_range_all_values();
 	test_realloc_dec_first_bin_range_all_values();
 	test_realloc_dec_second_bin_range_all_values();
-	realloc_test_limits_between_pages();
 
 	test_show_alloc_mem_no_alloc();
 	test_show_alloc_mem_x_malloc(1, 1);

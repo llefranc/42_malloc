@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 14:19:49 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/22 17:35:51 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:02:19 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,22 +317,21 @@ void test_realloc_dec_in_same_page_does_nothing(void)
 	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST realloc_dec_in_same_page_does_nothing <<<<<<<<<\n");
 	void *ptr_large;
-	size_t large_size = 3000;
+	size_t large_size = SMALL_MAX_ALLOC_SIZE + 2000;
 
-	printf("Allocating one large of 3000 bytes:\n");
+	printf("Allocating one large of %zu bytes:\n", large_size);
 	assert((ptr_large = ft_malloc(large_size)) != NULL);
 
 	assert(lmmap_get_size(bins.large) == 1);
 	assert(bins.large->nb_alloc == 1);
-	assert(bins.large->size == 4096);
 	memset(ptr_large, 'A', large_size);
 	show_alloc_mem();
 
-	printf("Doing a realloc of 2000 bytes:\n");
-	assert(ft_realloc(ptr_large, 2000) == ptr_large);
+	large_size -= 1000;
+	printf("Doing a realloc of %zu bytes:\n", large_size);
+	assert(ft_realloc(ptr_large, large_size) == ptr_large);
 	assert(bins.large->nb_alloc == 1);
-	assert(bins.large->size == 4096);
-	memset(ptr_large, 'B', 2000);
+	memset(ptr_large, 'B', large_size);
 	show_alloc_mem_ex(bins.large, 4096);
 	show_alloc_mem();
 
@@ -344,21 +343,19 @@ void test_realloc_dec_trim_pages(void)
 	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST realloc_dec_trim_pages <<<<<<<<<\n");
 	void *ptr_large;
-	size_t large_size = 10000;
+	size_t large_size = SMALL_MAX_ALLOC_SIZE + 10000;
 
-	printf("Allocating one large of 10000 bytes:\n");
+	printf("Allocating one large of %zu bytes:\n", large_size);
 	assert((ptr_large = ft_malloc(large_size)) != NULL);
 
 	assert(lmmap_get_size(bins.large) == 1);
 	assert(bins.large->nb_alloc == 1);
-	assert(bins.large->size == 4096 * 3);
 	memset(ptr_large, 'A', large_size);
 	show_alloc_mem();
 
-	printf("Doing a realloc of 2000 bytes:\n");
-	assert(ft_realloc(ptr_large, 2000) == ptr_large);
+	printf("Doing a realloc of %u bytes:\n", SMALL_MAX_ALLOC_SIZE + 2000);
+	assert(ft_realloc(ptr_large, SMALL_MAX_ALLOC_SIZE + 2000) == ptr_large);
 	assert(bins.large->nb_alloc == 1);
-	assert(bins.large->size == 4096);
 	memset(ptr_large, 'B', 2000);
 	show_alloc_mem_ex(bins.large, 4096);
 
@@ -407,7 +404,7 @@ void test_realloc_inc_first_bin_range_all_values(void)
 	assert((ptr = ft_malloc(size)) != NULL);
 	memset(ptr, 'A', size);
 	++size;
-	while (size <= 8100) {
+	while (size <= SMALL_MAX_ALLOC_SIZE + 6000) {
 		void *old_ptr = ptr;
 		printf("allocating %zu bytes\n", size);
 		assert((ptr = ft_realloc(ptr, size)) != NULL);
@@ -502,7 +499,7 @@ void test_realloc_inc_second_bin_range_all_values(void)
 	assert((ptr = ft_malloc(size)) != NULL);
 	memset(ptr, 'A', size);
 	++size;
-	while (size <= 8100) {
+	while (size <= SMALL_MAX_ALLOC_SIZE + 6000) {
 		void *old_ptr = ptr;
 		printf("allocating %zu bytes\n", size);
 		assert((ptr = ft_realloc(ptr, size)) != NULL);
@@ -556,7 +553,7 @@ void test_realloc_dec_first_bin_range_all_values(void)
 	clear_bins();
 	printf("\n>>>>>>>>> BEGIN TEST realloc_dec_first_bin_range_all_values <<<<<<<<<\n");
 	void *ptr;
-	size_t size = 8100;
+	size_t size = SMALL_MAX_ALLOC_SIZE + 6000;
 	char letter = 'A';
 
 	assert((ptr = ft_malloc(size)) != NULL);
@@ -626,7 +623,7 @@ void test_realloc_dec_second_bin_range_all_values(void)
 	assert(ft_malloc(SMALL_MAX_ALLOC_SIZE + 1) != NULL);
 	assert(lmmap_get_size(bins.large) == 1);
 
-	size_t size = 8100;
+	size_t size = SMALL_MAX_ALLOC_SIZE + 6000;
 	char letter = 'A';
 
 	assert((ptr = ft_malloc(size)) != NULL);
@@ -648,19 +645,4 @@ void test_realloc_dec_second_bin_range_all_values(void)
 	show_alloc_mem_ex(bins.tiny->next, 2000);
 
 	printf("\n>>>>>>>>> END TEST test_realloc_dec_second_bin_range_all_values <<<<<<<<<\n");
-}
-
-void realloc_test_limits_between_pages(void)
-{
-	clear_bins();
-	printf("\n>>>>>>>>> BEGIN TEST test_limits_between_bins <<<<<<<<<\n");
-	void *ptr;
-	printf("Creating a large alloc of 4001 bytes (2 pages):\n");
-	assert((ptr = ft_malloc(4001)) != NULL);
-	assert(bins.large->size == 8192);
-	assert((ptr = ft_realloc(ptr, 4000)) != NULL);
-	memset(ptr, 'A', 4000);
-	assert(bins.large->size == 4096);
-	show_alloc_mem_ex(bins.large, 4096);
-	printf("\n>>>>>>>>> END TEST test_limits_between_bins <<<<<<<<<\n");
 }

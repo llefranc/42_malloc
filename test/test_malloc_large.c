@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 11:32:00 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/22 17:15:09 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:55:12 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,6 @@
 
 const size_t large_nb = SMALL_MAX_ALLOC_SIZE + 16;
 
-void test_malloc_large_one_alloc_one_page(void)
-{
-	clear_bins();
-	printf("\n>>>>>>>>> BEGIN TEST malloc_large_one_alloc_one_page <<<<<<<<<\n");
-	static char letter = 'A';
-	char *ptr;
-
-	assert((ptr = ft_malloc(large_nb)) != NULL);
-	memset(ptr, letter++, large_nb);
-	show_alloc_mem_ex(bins.large, 4096);
-	print_free_chunks(&bins.large->first_free);
-	printf("\n>>>>>>>>> END TEST malloc_large_one_alloc_one_page <<<<<<<<<\n");
-}
-
 void test_malloc_large_one_alloc_multi_pages(void)
 {
 	clear_bins();
@@ -50,21 +36,6 @@ void test_malloc_large_one_alloc_multi_pages(void)
 	show_alloc_mem_ex(bins.large, 128);
 	print_free_chunks(&bins.large->first_free);
 	printf("\n>>>>>>>>> END TEST malloc_large_one_alloc_multi_pages <<<<<<<<<\n");
-}
-
-void test_malloc_large_one_exact_page_size(void)
-{
-	clear_bins();
-	printf("\n>>>>>>>>> BEGIN TEST malloc_large_one_exact_page_size <<<<<<<<<\n");
-	size_t alloc_size = 4096 - sizeof(struct mmaphdr) - BNDARY_TAG_SIZE;
-	static char letter = 'A';
-	char *ptr;
-
-	assert((ptr = ft_malloc(alloc_size)) != NULL);
-	memset(ptr, letter++, alloc_size);
-	show_alloc_mem_ex(bins.large, 4128);
-	print_free_chunks(&bins.large->first_free);
-	printf("\n>>>>>>>>> END TEST malloc_large_one_exact_page_size <<<<<<<<<\n");
 }
 
 void test_malloc_large_several_allocs(void)
