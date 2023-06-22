@@ -17,6 +17,26 @@
 #include <sys/mman.h>
 #include <stdint.h>
 
+#include "utils.h"
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <string.h>
+
+struct rusage usage = {0};
+
+
+static void output_nb(const char *s, size_t nb)
+{
+	ft_puts(s);
+	ft_putnbr_base(nb, DEC);
+	ft_puts("\n");
+}
+
 /**
  * Return a size rounded to a multiple of page_size.
 */
@@ -73,26 +93,37 @@ static void init_first_free_chk(struct mmaphdr *m)
 	 * Substracting only 1 boundary tag size (e.g. size of footer) because
 	 * size of header is already contained in sizeof(struct mmaphdr).
 	 */
-	size_t chk_size = m->size - sizeof(*m) - BNDARY_TAG_SIZE;
+	// 2 * pour footer + padding byte
+	size_t chk_size = m->size - sizeof(*m) - (2 * BNDARY_TAG_SIZE);
 	struct chkhdr *hdr = (struct chkhdr *)&m->start_chk;
 	struct chkftr *ftr;
 
 	/* Aligning chunk size on 16 */
-	chk_size &= 0xFFFFFFFFFFFFFFF0;
+	// chk_size &= 0xFFFFFFFFFFFFFFF0;
 
 	/* Init first chunk (one big free chunk) */
 	hdr->is_alloc = 0;
 	hdr->size = chk_size;
 	hdr->prev_free = &m->first_free;
 	hdr->next_free = NULL;
+
 	ftr = chk_htof(hdr);
-	ftr->is_alloc = 0;
-	ftr->size = chk_size;
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("ftr = chk_htof(hdr): ", usage.ru_minflt);
+
+	*((size_t *)ftr) = 0;
+	// *((size_t *)ftr) &= ~(1UL << 63);
+	// ftr->is_alloc = 0;
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("ftr->is_alloc: ", usage.ru_minflt);
+
+	*((size_t *)ftr) = chk_size;
+	// *((size_t *)ftr) |= chk_size & ~(1UL << 63);
+	// ftr->size = chk_size;
 
 	/* First and last point at init to the same chunk */
 	m->first_chk = hdr;
 	m->last_chk = ftr;
-
 	/* Point to the first and only chunk which is for now free */
 	m->first_free.next_free = hdr;
 	m->first_free.prev_free = NULL;
@@ -117,12 +148,26 @@ void * lmmap_new(struct mmaphdr **head, size_t size)
 		   MAP_ANONYMOUS, -1, 0);
 	if (tmp == NULL)
 		return NULL;
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("after mmap: ", usage.ru_minflt);
 	tmp->prev = NULL;
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("tmp->prev: ", usage.ru_minflt);
 	tmp->next = NULL;
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("tmp->next: ", usage.ru_minflt);
 	tmp->size = size;
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("tmp->size: ", usage.ru_minflt);
 	tmp->nb_alloc = 0;
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("tmp->nb_alloc: ", usage.ru_minflt);
 	init_first_free_chk(tmp);
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("init_fisrt_free_chk: ", usage.ru_minflt);
 	*head = tmp;
+	getrusage(RUSAGE_SELF, &usage);
+	output_nb("*head = tmp: ", usage.ru_minflt);
 	return tmp;
 }
 
@@ -242,9 +287,9 @@ void lmmap_print_all(struct mmaphdr *head)
 
 /**
  * Search in a mmaps linked list the best free chunk that can be allocated for a
- * specific size, e.g. a free chunk with the exact requested size, or a free 
+ * specific size, e.g. a free chunk with the exact requested size, or a free
  * chunk with the closest superior size to the requested size but that can still
- * be  splitted into an allocated chunk and at least the minimum free chunk 
+ * be  splitted into an allocated chunk and at least the minimum free chunk
  * possible.
  *
  * @head: First element of the mmaps linked list.
@@ -263,7 +308,7 @@ struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size)
 		while (chk) {
 			if (chk->size == size) {
 				return chk;
-			} else if (chk_is_alloc_ok(chk, size) && 
+			} else if (chk_is_alloc_ok(chk, size) &&
 				   (!best || chk->size < best->size)) {
 				best = chk;
 			}
@@ -275,12 +320,12 @@ struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size)
 }
 
 /**
- * Search in a mmaps linked list for the element containing the specified 
+ * Search in a mmaps linked list for the element containing the specified
  * address in its mmaps' address range.
- * 
+ *
  * @head: First element of the mmaps linked list.
  * @addr: The address belonging to a mmap area.
- * Return: A pointer to the mmap area containing in its address range the 
+ * Return: A pointer to the mmap area containing in its address range the
  *         specified address, or NULL if there was no match.
 */
 struct mmaphdr * lmmap_get_elem(struct mmaphdr *head, void *addr)

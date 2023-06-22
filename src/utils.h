@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   allocator.h                                        :+:      :+:    :+:   */
+/*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/20 12:12:22 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/21 18:32:36 by llefranc         ###   ########.fr       */
+/*   Created: 2023/06/21 18:12:54 by llefranc          #+#    #+#             */
+/*   Updated: 2023/06/21 18:17:19 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ALLOCATOR_H
-#define ALLOCATOR_H
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <stddef.h>
 
-// #ifdef TEST
-// #  define malloc ft_malloc
-// #  define free ft_free
-// #  define realloc ft_realloc
-// #endif
+#define DEC "0123456789"
+#define HEX "0123456789abcdef"
 
-void *ft_malloc(size_t size);
-void *ft_realloc(void *ptr, size_t size);
-void ft_free(void* ptr);
-void show_alloc_mem(void);
+size_t ft_strlen(const char *str);
+void ft_puts(const char *s);
+void ft_putnbr_base(size_t n, char *base);
 
-#endif /* ALLOCATOR_H */
+#endif /* UTILS_H */

@@ -46,7 +46,7 @@ static void free_empty_bins(struct mmaphdr *head)
  * @ptr: A pointer to an allocated area previously returned by malloc call. Do
  *       nothing if this pointer is NULL.
 */
-void free(void *ptr)
+void ft_free(void *ptr)
 {
 	struct mmaphdr *head;
 	struct mmaphdr *bin;
