@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   chunk.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lucaslefrancq <lucaslefrancq@student.42    +#+  +:+       +#+        */
+/*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 14:02:55 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/11 18:17:57 by lucaslefran      ###   ########.fr       */
+/*   Updated: 2023/06/22 17:06:41 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,8 @@ static void free_chunk_list_insert(struct chkhdr *new_fchk,
 static void update_bnd_tags(struct chkhdr *hdr, struct chkftr *ftr,
                             _Bool is_alloc, size_t size)
 {
-	hdr->is_alloc = is_alloc;
-	hdr->size = size;
-	ftr->is_alloc = is_alloc;
-	ftr->size = size;
+	chk_setinfo(&hdr->info, is_alloc, size);
+	chk_setinfo(&ftr->info, is_alloc, size);
 }
 
 /**
@@ -71,14 +69,14 @@ void chk_print(struct chkhdr *hdr)
 	struct chkftr *ftr = chk_htof(hdr);
 
 	printf("---- printing chunk ----\n");
-	printf("header: is_alloc=%d, size=%zu\n", hdr->is_alloc, (size_t)hdr->size);
-	if (!hdr->is_alloc) {
+	printf("header: is_alloc=%d, size=%zu\n", chk_isalloc(hdr->info), chk_size(hdr->info));
+	if (!chk_isalloc(hdr->info)) {
 		printf("prev free chunk addr=%p\n", hdr->prev_free);
 		printf("next free chunk addr=%p\n", hdr->next_free);
 	}
-	printf("footer: is_alloc=%d, size=%zu\n", ftr->is_alloc, (size_t)ftr->size);
+	printf("footer: is_alloc=%d, size=%zu\n", chk_isalloc(ftr->info), chk_size(ftr->info));
 	printf("dump of chunk body:");
-	for (size_t i = 0; i < hdr->size; ++i) {
+	for (size_t i = 0; i < chk_size(hdr->info); ++i) {
 		if (i % 16 == 0)
 			printf("\n0x%04zu: ", i);
 		else if (i % 8 == 0)
@@ -110,13 +108,13 @@ struct chkhdr * chk_alloc(struct chkhdr *hdr, size_t size_alloc)
 	size_t size_free;
 
 	size_alloc = chk_size_16align(size_alloc);
-	size_free = hdr->size - size_alloc - (2 * BNDARY_TAG_SIZE);
+	size_free = chk_size(hdr->info) - size_alloc - (2 * BNDARY_TAG_SIZE);
 	if (!hdr || !chk_is_alloc_ok(hdr, size_alloc))
 		return NULL;
-	if (hdr->size == size_alloc) {
+	if (chk_size(hdr->info) == size_alloc) {
 		free_chunk_list_rm(hdr);
-		hdr->is_alloc = 1;
-		ftr->is_alloc = 1;
+		chk_setinfo(&hdr->info, 1, size_alloc);
+		chk_setinfo(&ftr->info, 1, size_alloc);
 	} else {
 		/* Updating new alloc chunk */
 		new_ftr = (struct chkftr *)((uint8_t *)hdr + BNDARY_TAG_SIZE +
@@ -150,12 +148,13 @@ static int merge_prev_chk(struct chkhdr *hdr, struct chkftr *ftr,
 	if (hdr == first_chk)
 		return -1;
 	prev_ftr = chk_prev_ftr(ftr);
-	if (prev_ftr->is_alloc)
+	if (chk_isalloc(prev_ftr->info))
 		return -1;
 	prev_hdr = chk_ftoh(prev_ftr);
-	new_size = prev_hdr->size + hdr->size + BNDARY_TAG_SIZE * 2;
-	prev_hdr->size = new_size;
-	ftr->size = new_size;
+	new_size = chk_size(prev_hdr->info) + chk_size(hdr->info) +
+	           BNDARY_TAG_SIZE * 2;
+	chk_setinfo(&prev_hdr->info, 0, new_size);
+	chk_setinfo(&ftr->info, 0, new_size);
 	return 0;
 }
 
@@ -176,12 +175,14 @@ static int merge_next_chk(struct chkhdr *hdr, struct chkftr *ftr,
 	if (ftr == last_chk)
 		return -1;
 	next_hdr = chk_next_hdr(hdr);
-	if (next_hdr->is_alloc)
+	if (chk_isalloc(next_hdr->info))
 		return -1;
 	next_ftr = chk_htof(next_hdr);
-	new_size = hdr->size + next_hdr->size + BNDARY_TAG_SIZE * 2;
-	hdr->size = new_size;
-	next_ftr->size = new_size;
+	new_size = chk_size(hdr->info) + chk_size(next_hdr->info) +
+	           BNDARY_TAG_SIZE * 2;
+
+	chk_setinfo(&hdr->info, 0, new_size);
+	chk_setinfo(&next_ftr->info, 0, new_size);
 
 	hdr->prev_free = next_hdr->prev_free;
 	hdr->next_free = next_hdr->next_free;
@@ -212,10 +213,10 @@ struct chkhdr * chk_free(struct chkhdr *hdr, struct chkhdr *first_chk,
 	_Bool merge_prev = 0;
 	_Bool merge_next = 0;
 
-	if (!hdr || !hdr->is_alloc)
+	if (!hdr || !chk_isalloc(hdr->info))
 		return NULL;
-	hdr->is_alloc = 0;
-	ftr->is_alloc = 0;
+	chk_setinfo(&hdr->info, 0, chk_size(hdr->info));
+	chk_setinfo(&ftr->info, 0, chk_size(ftr->info));
 
 	/*
 	 * Need to merge next chunk before merging previous chunk to correctly

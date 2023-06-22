@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 14:19:49 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/21 11:30:53 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:17:28 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,7 +268,7 @@ void test_realloc_dec_split_chunk_merge(void)
 
 	printf("Doing a realloc (size - 32), split chunk should be merge with next free chunk:\n");
 	assert(ft_realloc(ptr_tiny, size_tiny - 32) == ptr_tiny);
-	assert(bins.tiny->first_chk->size == size_tiny - 32);
+	assert(chk_size(bins.tiny->first_chk->info) == size_tiny - 32);
 	assert(bins.tiny->nb_alloc == 2);
 	show_alloc_mem_ex(bins.tiny, 512);
 	print_free_chunks(&bins.tiny->first_free);
@@ -294,7 +294,7 @@ void test_realloc_dec_then_inc_same_bin(void)
 
 	printf("Doing a realloc (size - 32), split chunk should be merge with next big free chunk:\n");
 	assert(ft_realloc(ptr_tiny, size_tiny - 32) == ptr_tiny);
-	assert(bins.tiny->first_chk->size == size_tiny - 32);
+	assert(chk_size(bins.tiny->first_chk->info) == size_tiny - 32);
 	assert(bins.tiny->nb_alloc == 1);
 	show_alloc_mem_ex(bins.tiny, 256);
 	print_free_chunks(&bins.tiny->first_free);
@@ -376,16 +376,16 @@ static void assert_right_bin(void *ptr, size_t size)
 		assert(lmmap_get_size(bins.small) == 0);
 		assert(lmmap_get_size(bins.large) == 0);
 		assert(bins.tiny->nb_alloc == 1);
-		assert(hdr->size == chk_size_16align(size));
-		assert(ftr->size == chk_size_16align(size));
+		assert(chk_size(hdr->info) == chk_size_16align(size));
+		assert(chk_size(ftr->info) == chk_size_16align(size));
 	} else if (size <= SMALL_MAX_ALLOC_SIZE) {
 		assert(lmmap_get_size(bins.tiny) == 1);
 		assert(lmmap_get_size(bins.small) == 1);
 		assert(lmmap_get_size(bins.large) == 0);
 		assert(bins.tiny->nb_alloc == 0);
 		assert(bins.small->nb_alloc == 1);
-		assert(hdr->size == chk_size_16align(size));
-		assert(ftr->size == chk_size_16align(size));
+		assert(chk_size(hdr->info) == chk_size_16align(size));
+		assert(chk_size(ftr->info) == chk_size_16align(size));
 	} else {
 		assert(lmmap_get_size(bins.tiny) == 1);
 		assert(lmmap_get_size(bins.small) == 1);
@@ -448,16 +448,16 @@ static void assert_right_second_bin(void *ptr, size_t size)
 		assert(lmmap_get_size(bins.large) == 1);
 		assert(bins.tiny->next->nb_alloc == 1);
 		assert(bins.small->next->nb_alloc == 0);
-		assert(hdr->size == chk_size_16align(size));
-		assert(ftr->size == chk_size_16align(size));
+		assert(chk_size(hdr->info) == chk_size_16align(size));
+		assert(chk_size(ftr->info) == chk_size_16align(size));
 	} else if (size <= SMALL_MAX_ALLOC_SIZE) {
 		assert(lmmap_get_size(bins.tiny) == 2);
 		assert(lmmap_get_size(bins.small) == 2);
 		assert(lmmap_get_size(bins.large) == 1);
 		assert(bins.tiny->next->nb_alloc == 0);
 		assert(bins.small->next->nb_alloc == 1);
-		assert(hdr->size == chk_size_16align(size));
-		assert(ftr->size == chk_size_16align(size));
+		assert(chk_size(hdr->info) == chk_size_16align(size));
+		assert(chk_size(ftr->info) == chk_size_16align(size));
 	} else {
 		assert(lmmap_get_size(bins.tiny) == 2);
 		assert(lmmap_get_size(bins.small) == 2);
@@ -477,7 +477,7 @@ void test_realloc_inc_second_bin_range_all_values(void)
 	while (lmmap_get_size(bins.tiny) != 2)
 		assert((ptr = ft_malloc(TINY_MAX_ALLOC_SIZE)) != NULL);
 	ft_free(ptr);
-	assert(ft_malloc(bins.tiny->first_free.next_free->size));
+	assert(ft_malloc(chk_size(bins.tiny->first_free.next_free->info)));
 	assert(lmmap_get_size(bins.tiny) == 2);
 	assert(bins.tiny->next->nb_alloc == 0);
 
@@ -485,7 +485,7 @@ void test_realloc_inc_second_bin_range_all_values(void)
 	while (lmmap_get_size(bins.small) != 2)
 		assert((ptr = ft_malloc(SMALL_MAX_ALLOC_SIZE)) != NULL);
 	ft_free(ptr);
-	assert(ft_malloc(bins.small->first_free.next_free->size));
+	assert(ft_malloc(chk_size(bins.small->first_free.next_free->info)));
 	assert(lmmap_get_size(bins.small) == 2);
 	assert(bins.small->next->nb_alloc == 0);
 
@@ -610,7 +610,7 @@ void test_realloc_dec_second_bin_range_all_values(void)
 	while (lmmap_get_size(bins.tiny) != 2)
 		assert((ptr = ft_malloc(TINY_MAX_ALLOC_SIZE)) != NULL);
 	ft_free(ptr);
-	assert(ft_malloc(bins.tiny->first_free.next_free->size));
+	assert(ft_malloc(chk_size(bins.tiny->first_free.next_free->info)));
 	assert(lmmap_get_size(bins.tiny) == 2);
 	assert(bins.tiny->next->nb_alloc == 0);
 
@@ -618,7 +618,7 @@ void test_realloc_dec_second_bin_range_all_values(void)
 	while (lmmap_get_size(bins.small) != 2)
 		assert((ptr = ft_malloc(SMALL_MAX_ALLOC_SIZE)) != NULL);
 	ft_free(ptr);
-	assert(ft_malloc(bins.small->first_free.next_free->size));
+	assert(ft_malloc(chk_size(bins.small->first_free.next_free->info)));
 	assert(lmmap_get_size(bins.small) == 2);
 	assert(bins.small->next->nb_alloc == 0);
 

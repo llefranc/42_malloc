@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 10:34:48 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:14:39 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void test_chk_is_alloc_ok(void)
 	struct chkhdr hdr;
 	size_t size = 16;
 
-	hdr.size = 0;
-	for (; hdr.size < 70; hdr.size++) {
+	hdr.info = 0;
+	for (; chk_size(hdr.info) < 70; hdr.info++) {
 		printf("free chunk size = %zu, trying to alloc %zu bytes, is_fitting: "
-		       "%d\n", (size_t)hdr.size, size, chk_is_alloc_ok(&hdr, size));
+		       "%d\n", chk_size(hdr.info), size, chk_is_alloc_ok(&hdr, size));
 	}
 
 	printf("\n>>>>>>>>> END TEST chk_is_alloc_ok <<<<<<<<<\n");
@@ -200,10 +200,10 @@ void test_chk_free_no_merge_several_small_chunks(void)
 	printf("-------- mmap after 6 allocs --------\n");
 
 	assert((hdr2 = chk_free(hdr2, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk 2 at address %p is now free (size: %zu)\n", hdr2, (size_t)hdr2->size);
+	printf("chunk 2 at address %p is now free (size: %zu)\n", hdr2, chk_size(hdr2->info));
 
 	assert((hdr5 = chk_free(hdr5, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk 5 at address %p is now free (size: %zu)\n", hdr5, (size_t)hdr5->size);
+	printf("chunk 5 at address %p is now free (size: %zu)\n", hdr5, chk_size(hdr5->info));
 
 	printf("-------- mmap after free block 2 and 5 --------\n");
 	show_alloc_mem_ex(m, 368);
@@ -244,17 +244,17 @@ void test_chk_free_merge_prev(void)
 
 	printf("freeing first chunk\n");
 	assert((hdr3 = chk_free(hdr3, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr3, (size_t)hdr3->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr3, chk_size(hdr3->info));
 
 	printf("freeing another chunk after the first one freed, will be"
 	       " merge with previous\n");
 	assert((hdr4 = chk_free(hdr4, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr4, (size_t)hdr4->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr4, chk_size(hdr4->info));
 
 	printf("freeing another chunk after the first two freed, will be"
 	       " merge with previous chunk (resulting from previous merge)\n");
 	assert((hdr5 = chk_free(hdr5, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr5, (size_t)hdr5->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr5, chk_size(hdr5->info));
 
 	printf("-------- mmap after free block 3, 4 and 5 --------\n");
 	show_alloc_mem_ex(m, 368);
@@ -294,17 +294,17 @@ void test_chk_free_merge_next(void)
 
 	printf("freeing first chunk\n");
 	assert((hdr4 = chk_free(hdr4, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr4, (size_t)hdr4->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr4, chk_size(hdr4->info));
 
 	printf("freeing another chunk before the first one freed, will be"
 	       " merge with next\n");
 	assert((hdr3 = chk_free(hdr3, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr3, (size_t)hdr3->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr3, chk_size(hdr3->info));
 
 	printf("freeing another chunk before the first two freed, will be"
 	       " merge with next chunk (resulting from next merge)\n");
 	assert((hdr2 = chk_free(hdr2, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr2, (size_t)hdr2->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr2, chk_size(hdr2->info));
 
 	printf("-------- mmap after free block 2, 3 and 4 --------\n");
 	show_alloc_mem_ex(m, 368);
@@ -344,16 +344,16 @@ void test_chk_free_merge_prev_and_next(void)
 
 	printf("freeing first chunk (chunk 2)\n");
 	assert((hdr2 = chk_free(hdr2, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr2, (size_t)hdr2->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr2, chk_size(hdr2->info));
 
 	printf("freeing another chunk (chunk 4, no merge)\n");
 	assert((hdr4 = chk_free(hdr4, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr4, (size_t)hdr4->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr4, chk_size(hdr4->info));
 
 	printf("freeing chunk 3, between the two previous freed chunks (will "
 	       "be merge with prev and next)\n");
 	assert((hdr3 = chk_free(hdr3, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free (size: %zu)\n", hdr3, (size_t)hdr3->size);
+	printf("chunk at address %p is now free (size: %zu)\n", hdr3, chk_size(hdr3->info));
 
 	printf("-------- mmap after free block 2, 3 and 4 --------\n");
 	show_alloc_mem_ex(m, 368);
@@ -397,22 +397,22 @@ void test_chk_free_all_with_all_cases(void)
 
 	printf("freeing chunk 2\n");
 	assert((tmp = chk_free(hdr2, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free, size %zu\n", tmp, (size_t)tmp->size);
+	printf("chunk at address %p is now free, size %zu\n", tmp, chk_size(tmp->info));
 	printf("freeing chunk 3\n");
 	assert((tmp = chk_free(hdr3, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free, size %zu\n", tmp, (size_t)tmp->size);
+	printf("chunk at address %p is now free, size %zu\n", tmp, chk_size(tmp->info));
 	printf("freeing chunk 1\n");
 	assert((tmp = chk_free(hdr1, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free, size %zu\n", tmp, (size_t)tmp->size);
+	printf("chunk at address %p is now free, size %zu\n", tmp, chk_size(tmp->info));
 	printf("freeing chunk 6\n");
 	assert((tmp = chk_free(hdr6, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free, size %zu\n", tmp, (size_t)tmp->size);
+	printf("chunk at address %p is now free, size %zu\n", tmp, chk_size(tmp->info));
 	printf("freeing chunk 5\n");
 	assert((tmp = chk_free(hdr5, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free, size %zu\n", tmp, (size_t)tmp->size);
+	printf("chunk at address %p is now free, size %zu\n", tmp, chk_size(tmp->info));
 	printf("freeing chunk 4\n");
 	assert((tmp = chk_free(hdr4, m->first_chk, m->last_chk, &m->first_free)) != NULL);
-	printf("chunk at address %p is now free, size %zu\n", tmp, (size_t)tmp->size);
+	printf("chunk at address %p is now free, size %zu\n", tmp, chk_size(tmp->info));
 
 	printf("-------- mmap after freeing all blocks --------\n");
 	show_alloc_mem_ex(m, 4096);

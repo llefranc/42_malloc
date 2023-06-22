@@ -81,13 +81,11 @@ static void init_first_free_chk(struct mmaphdr *m)
 	chk_size &= 0xFFFFFFFFFFFFFFF0;
 
 	/* Init first chunk (one big free chunk) */
-	hdr->is_alloc = 0;
-	hdr->size = chk_size;
+	chk_setinfo(&hdr->info, 0, chk_size);
 	hdr->prev_free = &m->first_free;
 	hdr->next_free = NULL;
 	ftr = chk_htof(hdr);
-	ftr->is_alloc = 0;
-	ftr->size = chk_size;
+	chk_setinfo(&ftr->info, 0, chk_size);
 
 	/* First and last point at init to the same chunk */
 	m->first_chk = hdr;
@@ -242,9 +240,9 @@ void lmmap_print_all(struct mmaphdr *head)
 
 /**
  * Search in a mmaps linked list the best free chunk that can be allocated for a
- * specific size, e.g. a free chunk with the exact requested size, or a free 
+ * specific size, e.g. a free chunk with the exact requested size, or a free
  * chunk with the closest superior size to the requested size but that can still
- * be  splitted into an allocated chunk and at least the minimum free chunk 
+ * be  splitted into an allocated chunk and at least the minimum free chunk
  * possible.
  *
  * @head: First element of the mmaps linked list.
@@ -261,10 +259,10 @@ struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size)
 	while (head) {
 		chk = head->first_free.next_free;
 		while (chk) {
-			if (chk->size == size) {
+			if (chk_size(chk->info) == size) {
 				return chk;
-			} else if (chk_is_alloc_ok(chk, size) && 
-				   (!best || chk->size < best->size)) {
+			} else if (chk_is_alloc_ok(chk, size) && (!best ||
+			    chk_size(chk->info) < chk_size(best->info))) {
 				best = chk;
 			}
 			chk = chk->next_free;
@@ -275,12 +273,12 @@ struct chkhdr * lmmap_bestfit(struct mmaphdr *head, size_t size)
 }
 
 /**
- * Search in a mmaps linked list for the element containing the specified 
+ * Search in a mmaps linked list for the element containing the specified
  * address in its mmaps' address range.
- * 
+ *
  * @head: First element of the mmaps linked list.
  * @addr: The address belonging to a mmap area.
- * Return: A pointer to the mmap area containing in its address range the 
+ * Return: A pointer to the mmap area containing in its address range the
  *         specified address, or NULL if there was no match.
 */
 struct mmaphdr * lmmap_get_elem(struct mmaphdr *head, void *addr)

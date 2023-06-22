@@ -56,12 +56,12 @@ void free(void *ptr)
 		return;
 	mutex_lock();
 	chk = (struct chkhdr *)((uint8_t *)ptr - BNDARY_TAG_SIZE);
-	if (chk->size > SMALL_MAX_ALLOC_SIZE) {
+	if (chk_size(chk->info) > SMALL_MAX_ALLOC_SIZE) {
 		bin = (struct mmaphdr *)((uint8_t *)chk + BNDARY_TAG_SIZE
 		      - sizeof(*bin));
 		lmmap_rm_elem(&bins.large, bin);
 	} else {
-		if (chk->size <= TINY_MAX_ALLOC_SIZE) {
+		if (chk_size(chk->info) <= TINY_MAX_ALLOC_SIZE) {
 			head = bins.tiny;
 		} else {
 			head = bins.small;

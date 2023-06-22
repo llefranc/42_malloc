@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 11:32:00 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/21 11:29:04 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:15:09 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void test_malloc_large_several_allocs(void)
 	while (head) {
 		printf("\n------------\n");
 		printf("\nlarge alloc nb %d\n", nb_allocs++);
-		printf("allocated size = %zu\n", (size_t)head->first_chk->size);
+		printf("allocated size = %zu\n", chk_size(head->first_chk->info));
 		show_alloc_mem_ex(head, 128);
 		print_free_chunks(&head->first_free);
 		head = head->next;

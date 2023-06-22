@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:55 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/21 12:29:47 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 16:34:59 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,21 @@ static void split_chk(struct mmaphdr *bin, struct chkhdr *hdr,
 	struct chkftr *ftr = chk_htof(hdr);
 	struct chkhdr *new_hdr;
 	struct chkftr *new_ftr;
-	size_t size_free = hdr->size - size_alloc - (2 * BNDARY_TAG_SIZE);
+	size_t size_free = chk_size(hdr->info) - size_alloc -
+	                   (2 * BNDARY_TAG_SIZE);
 
 	/* New allocated chunk */
-	hdr->size = size_alloc;
+	chk_setinfo(&hdr->info, 1, size_alloc);
 	new_ftr = chk_htof(hdr);
-	new_ftr->is_alloc = 1;
-	new_ftr->size = size_alloc;
+	chk_setinfo(&new_ftr->info, 1, size_alloc);
 
 	/*
 	 * Setting the second chunk resulting of the split to alloc chunk in
 	 * order to call chk_free() function on it.
 	 */
-	ftr->size = size_free;
+	chk_setinfo(&ftr->info, 1, size_free);
 	new_hdr = chk_ftoh(ftr);
-	new_hdr->is_alloc = 1;
-	new_hdr->size = size_free;
+	chk_setinfo(&new_hdr->info, 1, size_free);
 	chk_free(new_hdr, bin->first_chk, bin->last_chk, &bin->first_free);
 }
 
@@ -100,10 +99,10 @@ static void trim_pages(struct mmaphdr *bin, struct chkhdr *hdr,
 		* header and footer can be aligned on 8, and so the pointer
 		* returned to the memory allocated can be aligned on 16.
 		*/
-		hdr->size = new_size - sizeof(*bin) - (BNDARY_TAG_SIZE * 2);
+		chk_setinfo(&hdr->info, 1, new_size - sizeof(*bin) -
+		            (BNDARY_TAG_SIZE * 2));
 		new_ftr = chk_htof(hdr);
-		new_ftr->is_alloc = 1;
-		new_ftr->size = hdr->size;
+		chk_setinfo(&new_ftr->info, 1, chk_size(hdr->info));
 
 		munmap(trim_addr, bin->size - new_size);
 		bin->size = new_size;
@@ -169,16 +168,16 @@ void *realloc(void *ptr, size_t size)
 	size_alloc = chk_size_16align(size);
 	chk = (struct chkhdr *)((uint8_t *)ptr - BNDARY_TAG_SIZE);
 
-	if (is_new_alloc(size_alloc, chk->size)) {
+	if (is_new_alloc(size_alloc, chk_size(chk->info))) {
 		if ((new_alloc = malloc(size)) == NULL)
 			goto end_null;
-		if (size > chk->size)
-			memcpy(new_alloc, ptr, chk->size);
+		if (size > chk_size(chk->info))
+			memcpy(new_alloc, ptr, chk_size(chk->info));
 		else
 			memcpy(new_alloc, ptr, size);
 		free(ptr);
 		ptr = new_alloc;
-	} else if (is_decrease(size_alloc, chk->size)) {
+	} else if (is_decrease(size_alloc, chk_size(chk->info))) {
 		bin = get_bin(ptr, size);
 		if (size_alloc > SMALL_MAX_ALLOC_SIZE) {
 			trim_pages(bin, chk, size_alloc);

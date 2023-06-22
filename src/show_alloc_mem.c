@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:51 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/21 11:12:16 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 16:58:20 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@
 */
 static inline size_t print_alloc_chk(struct chkhdr *hdr)
 {
-	if (!hdr->is_alloc)
+	if (!chk_isalloc(hdr->info))
 		return 0;
 	printf("%p - %p : %zu bytes\n", (((uint8_t*)hdr) + BNDARY_TAG_SIZE),
-	       chk_htof(hdr), (size_t)hdr->size);
-	return hdr->size;
+	       chk_htof(hdr), chk_size(hdr->info));
+	return chk_size(hdr->info);
 }
 
 /**

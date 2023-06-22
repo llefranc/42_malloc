@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 15:56:17 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/20 17:28:32 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:07:00 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void print_free_chunks(struct chkhdr *first_free)
 		printf("-------------\n");
 		printf("free chunk nb %d\n", i++);
 		printf("address of free chunk: %p\n", elem);
-		printf("size of free chunk: %zu\n", (size_t)elem->size);
+		printf("size of free chunk: %zu\n", chk_size(elem->info));
 		printf("address of prev free chunk: %p\n", elem->prev_free);
 		printf("address of next free chunk: %p\n", elem->next_free);
 		printf("-------------\n");
