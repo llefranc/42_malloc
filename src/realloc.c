@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:55 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/22 16:34:59 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:25:15 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include "mutex.h"
 #include "chunk.h"
 #include "bins.h"
+#include "utils.h"
 
-#include <string.h>
 #include <unistd.h>
 #include <sys/mman.h>
 
@@ -172,9 +172,9 @@ void *realloc(void *ptr, size_t size)
 		if ((new_alloc = malloc(size)) == NULL)
 			goto end_null;
 		if (size > chk_size(chk->info))
-			memcpy(new_alloc, ptr, chk_size(chk->info));
+			ft_memcpy(new_alloc, ptr, chk_size(chk->info));
 		else
-			memcpy(new_alloc, ptr, size);
+			ft_memcpy(new_alloc, ptr, size);
 		free(ptr);
 		ptr = new_alloc;
 	} else if (is_decrease(size_alloc, chk_size(chk->info))) {

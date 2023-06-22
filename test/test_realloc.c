@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 14:19:49 by llefranc          #+#    #+#             */
-/*   Updated: 2023/06/22 17:17:28 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:35:51 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -427,7 +427,7 @@ void test_realloc_inc_first_bin_range_all_values(void)
 				assert(old_ptr == ptr);
 			nb_pages = new_nb_pages;
 		}
-		show_alloc_mem();
+		// show_alloc_mem();
 		assert_right_bin(ptr, size);
 		++letter;
 		++size;
@@ -522,7 +522,7 @@ void test_realloc_inc_second_bin_range_all_values(void)
 				assert(old_ptr == ptr);
 			nb_pages = new_nb_pages;
 		}
-		show_alloc_mem();
+		// show_alloc_mem();
 		assert_right_second_bin(ptr, size);
 		++letter;
 		++size;
@@ -571,7 +571,7 @@ void test_realloc_dec_first_bin_range_all_values(void)
 		if (size != TINY_MAX_ALLOC_SIZE && size != SMALL_MAX_ALLOC_SIZE)
 			assert(old_ptr == ptr);
 
-		show_alloc_mem();
+		// show_alloc_mem();
 		++letter;
 		--size;
 	}
@@ -641,7 +641,7 @@ void test_realloc_dec_second_bin_range_all_values(void)
 		if (size != TINY_MAX_ALLOC_SIZE && size != SMALL_MAX_ALLOC_SIZE)
 			assert(old_ptr == ptr);
 
-		show_alloc_mem();
+		// show_alloc_mem();
 		++letter;
 		--size;
 	}

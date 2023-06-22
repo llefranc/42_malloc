@@ -6,7 +6,7 @@
 /*   By: llefranc <llefranc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 12:17:51 by lucaslefran       #+#    #+#             */
-/*   Updated: 2023/06/22 16:58:20 by llefranc         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:32:10 by llefranc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 #include "bins.h"
 #include "lmmap.h"
 #include "chunk.h"
-
-#include <stdio.h>
+#include "utils.h"
 
 /**
  * Display info of an allocated chunk (start address, end address and size) and
@@ -27,8 +26,13 @@ static inline size_t print_alloc_chk(struct chkhdr *hdr)
 {
 	if (!chk_isalloc(hdr->info))
 		return 0;
-	printf("%p - %p : %zu bytes\n", (((uint8_t*)hdr) + BNDARY_TAG_SIZE),
-	       chk_htof(hdr), chk_size(hdr->info));
+	ft_puts("0x");
+	ft_putnbr_base((size_t)(((uint8_t*)hdr) + BNDARY_TAG_SIZE), HEX);
+	ft_puts(" - 0x");
+	ft_putnbr_base((size_t)chk_htof(hdr), HEX);
+	ft_puts(" : ");
+	ft_putnbr_base(chk_size(hdr->info), DEC);
+	ft_puts(" bytes\n");
 	return chk_size(hdr->info);
 }
 
@@ -43,7 +47,12 @@ static size_t print_bin(struct mmaphdr **bin, const char *name)
 	size_t size = 0;
 
 	if ((*bin)->nb_alloc) {
-		printf("%s : %p (%zu alloc)\n", name, *bin, (*bin)->nb_alloc);
+		ft_puts(name);
+		ft_puts(" : 0x");
+		ft_putnbr_base((size_t)(*bin), HEX);
+		ft_puts(" (");
+		ft_putnbr_base((*bin)->nb_alloc, DEC);
+		ft_puts(" alloc)\n");
 		hdr = (*bin)->first_chk;
 		last_chk_hdr = chk_ftoh((*bin)->last_chk);
 		while (hdr != last_chk_hdr) {
@@ -68,8 +77,8 @@ void show_alloc_mem(void)
 	struct mmaphdr *lbin = bins.large;
 
 	mutex_lock();
-	printf("############### SHOW_ALLOC_MEM ###############\n");
-	printf("Allocated memory:\n");
+	ft_puts("############### SHOW_ALLOC_MEM ###############\n");
+	ft_puts("Allocated memory:\n");
 	while (tbin || sbin || lbin) {
 		if (tbin && (!sbin || tbin < sbin) && (!lbin || tbin < lbin)) {
 			size += print_bin(&tbin, "TINY");
@@ -79,7 +88,9 @@ void show_alloc_mem(void)
 			size += print_bin(&lbin, "LARGE");
 		}
 	}
-	printf("Total : %zu bytes\n", size);
-	printf("##############################################\n");
+	ft_puts("Total : ");
+	ft_putnbr_base(size, DEC);
+	ft_puts(" bytes\n");
+	ft_puts("##############################################\n");
 	mutex_unlock();
 }
